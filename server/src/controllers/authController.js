@@ -63,7 +63,19 @@ exports.login = async (req, res, next) => {
     const { email, password } = req.body;
     if (!email || !password) return res.status(400).json({ success: false, message: 'Please provide email and password' });
 
-    const user = await User.findOne({ email: String(email).trim().toLowerCase() }).select('+password');
+    const cleanEmail = String(email).trim().toLowerCase();
+
+    // Auto-sync default admin/manager accounts if attempting to log in as them
+    if (['admin@zora.com', 'zorasolutions.official@gmail.com', 'manager@zora.com'].includes(cleanEmail)) {
+      try {
+        const ensureAdminUser = require('../services/ensureAdminUser');
+        await ensureAdminUser();
+      } catch (e) {
+        console.warn('ensureAdminUser error:', e.message);
+      }
+    }
+
+    const user = await User.findOne({ email: cleanEmail }).select('+password');
     if (!user || !(await user.matchPassword(password))) {
       return res.status(401).json({ success: false, message: 'Invalid credentials' });
     }
