@@ -11,11 +11,18 @@ const dotenv = require('dotenv');
 });
 
 const connectDB = require('../server/src/config/db');
+const ensureAdminUser = require('../server/src/services/ensureAdminUser');
 const app = require('../server/src/app');
+
+let adminEnsured = false;
 
 module.exports = async (req, res) => {
   try {
     await connectDB();
+    if (!adminEnsured) {
+      await ensureAdminUser();
+      adminEnsured = true;
+    }
   } catch (err) {
     console.error('MongoDB connection error in Vercel function:', err.message);
   }

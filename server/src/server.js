@@ -26,10 +26,12 @@ const connectDB = require('./config/db');
 const http = require('http');
 const { initSocket } = require('./socket');
 
+const ensureAdminUser = require('./services/ensureAdminUser');
+
 const PORT = process.env.PORT || 5000;
 
 // Start HTTP server immediately; DB connects with retries.
-connectDB();
+connectDB().then(() => ensureAdminUser()).catch(() => {});
 const server = http.createServer(app);
 initSocket(server);
 if (!process.env.VERCEL) {
