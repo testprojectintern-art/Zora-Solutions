@@ -32,9 +32,12 @@ const PORT = process.env.PORT || 5000;
 connectDB();
 const server = http.createServer(app);
 initSocket(server);
-server.listen(PORT, '0.0.0.0', () => {
-  console.log(`🚀 Zora Server running on http://0.0.0.0:${PORT}`);
-  console.log(`📊 Environment: ${process.env.NODE_ENV}`);
-});
+if (!process.env.VERCEL) {
+  server.listen(PORT, '0.0.0.0', () => {
+    console.log(`🚀 Zora Server running on http://0.0.0.0:${PORT}`);
+    console.log(`📊 Environment: ${process.env.NODE_ENV}`);
+  });
+  require('./services/cronService');
+}
 
-require('./services/cronService');
+module.exports = app;
