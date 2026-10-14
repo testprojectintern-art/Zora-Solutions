@@ -6,26 +6,13 @@
  */
 export function getApiBaseUrl() {
   if (import.meta.env.VITE_API_URL) return import.meta.env.VITE_API_URL
-  if (import.meta.env.DEV) return '/api'
-  if (typeof window !== 'undefined') {
-    // If running on Netlify or standalone frontend host, default to Render backend
-    if (window.location.hostname.includes('netlify.app') || (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1')) {
-      return 'https://zora-solutions.onrender.com/api'
-    }
-    return '/api'
-  }
-  return 'https://zora-solutions.onrender.com/api'
+  return '/api'
 }
 
-/** Origin for Socket.IO / absolute media when API is same-origin in dev */
+/** Origin for Socket.IO / absolute media when API is same-origin */
 export function getSocketOrigin() {
   const base = getApiBaseUrl()
-  if (base.startsWith('http')) return base.replace(/\/api\/?$/i, '') || window.location.origin
-  if (typeof window !== 'undefined') {
-    if (window.location.hostname.includes('netlify.app') || (window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1')) {
-      return 'https://zora-solutions.onrender.com'
-    }
-    return window.location.origin
-  }
-  return 'https://zora-solutions.onrender.com'
+  if (base.startsWith('http')) return base.replace(/\/api\/?$/i, '') || (typeof window !== 'undefined' ? window.location.origin : '')
+  if (typeof window !== 'undefined') return window.location.origin
+  return ''
 }
