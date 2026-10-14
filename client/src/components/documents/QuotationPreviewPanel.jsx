@@ -1,16 +1,17 @@
-import { useMemo } from 'react'
-import { FiPrinter, FiSave, FiSend, FiDownload } from 'react-icons/fi'
+import { useMemo, useState, useEffect, useRef } from 'react'
+import { FiPrinter, FiSave, FiSend, FiDownload, FiCheckSquare, FiSquare } from 'react-icons/fi'
+import { FaWhatsapp } from 'react-icons/fa'
 import QuotationPrintBody from './QuotationPrintBody'
 import { printHtmlContent } from '../../lib/documentPrint'
+import { shareDocumentViaWhatsApp } from '../../lib/documentShare'
+import { formatMoney } from '../../lib/currencies'
 import {
   layoutPrintExtraCss,
   layoutToStyle,
   quotationLayoutFromSettings,
 } from '../../lib/quotationPrintLayout'
-import { useRef, useState, useEffect } from 'react'
 
 const DOC_WIDTH_PX = 794
-
 
 export default function QuotationPreviewPanel({
   quotation,
@@ -28,7 +29,10 @@ export default function QuotationPreviewPanel({
   const layout = useMemo(() => quotationLayoutFromSettings(siteSettings), [siteSettings])
   const mergedQuotation = q
 
-  const resolvedShowSeal = showSeal !== undefined ? showSeal : (mergedQuotation.showSeal ?? true)
+  // User toggle for signature (defaults to false - only add if user wants it)
+  const [includeSignature, setIncludeSignature] = useState(
+    showSeal !== undefined ? showSeal : (mergedQuotation.showSeal ?? false)
+  )
 
   const scrollRef = useRef(null)
   const docRef = useRef(null)
@@ -60,7 +64,7 @@ export default function QuotationPreviewPanel({
     })
     ro.observe(docRef.current)
     return () => ro.disconnect()
-  }, [layout, mergedQuotation])
+  }, [layout, mergedQuotation, includeSignature])
 
   const handlePrint = () => {
     const root = document.getElementById(printRootId)
@@ -68,34 +72,94 @@ export default function QuotationPreviewPanel({
     if (!inner) return
     const company = siteSettings.siteName || 'Quotation'
     printHtmlContent({
-      title: company,
+      title: `${company} - ${q.quotationNo || 'Quotation'}`,
       bodyHtml: `<div class="doc-print-frame">${inner}</div>`,
       extraCss: layoutPrintExtraCss(layout),
+    })
+  }
+
+  const handleWhatsAppShare = async () => {
+    const root = document.getElementById(printRootId)
+    const inner = root?.innerHTML
+    if (!inner) return
+
+    const htmlString = `
+      <!DOCTYPE html>
+      <html>
+        <head>
+          <meta charset="utf-8" />
+          <style>
+            @page { size: A4; margin: 12mm; }
+            * { box-sizing: border-box; }
+            body { font-family: 'Segoe UI', system-ui, sans-serif; margin: 0; padding: 0; background: #fff; }
+          </style>
+        </head>
+        <body>
+          <div style="padding: 12mm;">${inner}</div>
+        </body>
+      </html>
+    `
+
+    await shareDocumentViaWhatsApp({
+      htmlString,
+      filename: `${q.quotationNo || 'quotation'}.pdf`,
+      docType: 'Quotation',
+      docNo: q.quotationNo,
+      clientName: q.client?.name,
+      clientPhone: q.client?.phone,
+      amount: formatMoney(q.total || 0, q.currency || 'LKR'),
+      date: q.quotationDate ? new Date(q.quotationDate).toLocaleDateString('en-LK') : '',
+      validUntil: q.validUntil ? new Date(q.validUntil).toLocaleDateString('en-LK') : '',
+      companyName: siteSettings.siteName || 'Zora Solutions',
+      companyPhone: siteSettings.contactPhone || '0777498608',
+      companyEmail: siteSettings.adminEmail || siteSettings.contactEmail || 'zorasolutions.official@gmail.com',
     })
   }
 
   return (
     <div className="doc-preview-panel flex flex-col flex-1 min-h-0 h-full overflow-hidden">
       {!isDraft && (
-        <div className="no-print shrink-0 border-b bg-slate-50 px-4 py-3 flex flex-wrap items-center gap-2">
-          {onSaveDraft && (
-            <button type="button" disabled={saving} className="btn-outline btn-sm" onClick={() => onSaveDraft(mergedQuotation)}>
-              <FiSave size={14} /> Save
+        <div className="no-print shrink-0 border-b bg-slate-50 px-4 py-2.5 flex flex-wrap items-center justify-between gap-3">
+          <div className="flex flex-wrap items-center gap-2">
+            {onSaveDraft && (
+              <button type="button" disabled={saving} className="btn-outline btn-sm" onClick={() => onSaveDraft(mergedQuotation)}>
+                <FiSave size={14} /> Save
+              </button>
+            )}
+            {onSend && (
+              <button type="button" className="btn-outline btn-sm" onClick={() => onSend(mergedQuotation)}>
+                <FiSend size={14} /> Email
+              </button>
+            )}
+            {onDownloadPdf && q._id && (
+              <button type="button" className="btn-outline btn-sm" onClick={() => onDownloadPdf(q._id, q.quotationNo, includeSignature)}>
+                <FiDownload size={14} /> PDF
+              </button>
+            )}
+            <button type="button" className="btn-primary btn-sm" onClick={handlePrint}>
+              <FiPrinter size={14} /> Print
             </button>
-          )}
-          {onSend && (
-            <button type="button" className="btn-outline btn-sm" onClick={() => onSend(mergedQuotation)}>
-              <FiSend size={14} /> Send
+            <button
+              type="button"
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold text-white bg-emerald-600 hover:bg-emerald-700 active:scale-95 transition-all shadow-sm"
+              onClick={handleWhatsAppShare}
+              title="Share PDF directly via WhatsApp (iPhone / Mobile native share supported)"
+            >
+              <FaWhatsapp size={15} /> WhatsApp
             </button>
-          )}
-          {onDownloadPdf && q._id && (
-            <button type="button" className="btn-outline btn-sm" onClick={() => onDownloadPdf(q._id)}>
-              <FiDownload size={14} /> PDF
-            </button>
-          )}
-          <button type="button" className="btn-primary btn-sm" onClick={handlePrint}>
-            <FiPrinter size={14} /> Print
-          </button>
+          </div>
+
+          {/* Signature inclusion toggle */}
+          <label className="flex items-center gap-2 text-xs font-medium text-slate-700 cursor-pointer select-none bg-white px-3 py-1.5 rounded-lg border border-slate-200 hover:bg-slate-50 transition-colors shadow-2xs">
+            <input
+              type="checkbox"
+              checked={includeSignature}
+              onChange={(e) => setIncludeSignature(e.target.checked)}
+              className="sr-only"
+            />
+            {includeSignature ? <FiCheckSquare className="text-blue-600" size={16} /> : <FiSquare className="text-slate-400" size={16} />}
+            <span>Include Authorized Signature</span>
+          </label>
         </div>
       )}
 
@@ -113,16 +177,16 @@ export default function QuotationPreviewPanel({
               transformOrigin: 'top center',
             }}
           >
-          <QuotationPrintBody
-            quotation={mergedQuotation}
-            siteSettings={siteSettings}
-            preparedByDisplay={mergedQuotation.preparedBy}
-            bankLabel={bankLabel}
-            thankYouMessage={siteSettings.quotationThankYouMessage}
-            showRefOnDocument={layout.showRefOnDocument}
-            showSeal={resolvedShowSeal}
-          />
-        </div>
+            <QuotationPrintBody
+              quotation={mergedQuotation}
+              siteSettings={siteSettings}
+              preparedByDisplay={mergedQuotation.preparedBy}
+              bankLabel={bankLabel}
+              thankYouMessage={siteSettings.quotationThankYouMessage}
+              showRefOnDocument={layout.showRefOnDocument}
+              includeSignature={includeSignature}
+            />
+          </div>
         </div>
       </div>
     </div>

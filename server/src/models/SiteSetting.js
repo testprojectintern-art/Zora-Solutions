@@ -31,6 +31,9 @@ const siteSettingSchema = new mongoose.Schema({
   adminEmail: { type: String, default: 'zorasolutions.official@gmail.com' },
   sealUrl: { type: String, default: '' },
   letterheadUrl: { type: String, default: '' },
+  authorizedSignatureUrl: { type: String, default: '' },
+  authorizedSignatoryName: { type: String, default: '' },
+  authorizedSignatoryTitle: { type: String, default: 'Authorized Signatory' },
   signatures: {
     hr: { url: { type: String, default: '' }, label: { type: String, default: 'HR' } },
     admin: { url: { type: String, default: '' }, label: { type: String, default: 'Admin' } },

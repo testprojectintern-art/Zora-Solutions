@@ -6,6 +6,7 @@ import { motion } from 'framer-motion'
 import api from '../../lib/api'
 import toast from 'react-hot-toast'
 import { FiPlus, FiX, FiFileText, FiCheck, FiArrowRight, FiTrash2, FiEdit2, FiSearch, FiEye, FiSend, FiUpload, FiImage, FiDownload } from 'react-icons/fi'
+import { FaWhatsapp } from 'react-icons/fa'
 import { mediaUrl } from '../../lib/media'
 import useAuthStore from '../../store/authStore'
 import { SITE_SETTINGS_QUERY_KEY } from '../../hooks/useSiteBranding'
@@ -216,10 +217,10 @@ export default function AdminQuotations() {
     }
   }
 
-  const downloadQuotationPdf = async (id, quotationNo) => {
+  const downloadQuotationPdf = async (id, quotationNo, includeSignature = false) => {
     try {
       const { htmlStringToPdfDownload } = await import('../../lib/pdfGenerator');
-      const res = await api.get(`/quotations/${id}/pdf?html=true`, { responseType: 'text' });
+      const res = await api.get(`/quotations/${id}/pdf?html=true${includeSignature ? '&includeSignature=true' : ''}`, { responseType: 'text' });
       const htmlStr = typeof res.data === 'string' ? res.data : await res.data.text();
       const fname = `${quotationNo || viewing?.quotationNo || 'quotation'}.pdf`;
       toast.loading('Generating PDF...', { id: 'pdf-toast' });
@@ -228,6 +229,31 @@ export default function AdminQuotations() {
     } catch (err) {
       console.error(err);
       toast.error('PDF download failed', { id: 'pdf-toast' });
+    }
+  }
+
+  const shareQuotationWhatsApp = async (q, includeSignature = false) => {
+    try {
+      const { shareDocumentViaWhatsApp } = await import('../../lib/documentShare');
+      const res = await api.get(`/quotations/${q._id}/pdf?html=true${includeSignature ? '&includeSignature=true' : ''}`, { responseType: 'text' });
+      const htmlStr = typeof res.data === 'string' ? res.data : await res.data.text();
+      await shareDocumentViaWhatsApp({
+        htmlString: htmlStr,
+        filename: `${q.quotationNo || 'quotation'}.pdf`,
+        docType: 'Quotation',
+        docNo: q.quotationNo,
+        clientName: q.client?.name,
+        clientPhone: q.client?.phone,
+        amount: formatMoney(q.total || 0, q.currency || 'LKR'),
+        date: q.quotationDate ? new Date(q.quotationDate).toLocaleDateString('en-LK') : '',
+        validUntil: q.validUntil ? new Date(q.validUntil).toLocaleDateString('en-LK') : '',
+        companyName: siteSettings?.siteName || 'Zora Solutions',
+        companyPhone: siteSettings?.contactPhone || '0777498608',
+        companyEmail: siteSettings?.adminEmail || siteSettings?.contactEmail || 'zorasolutions.official@gmail.com',
+      });
+    } catch (err) {
+      console.error(err);
+      toast.error('Failed to prepare quotation for WhatsApp');
     }
   }
 
@@ -512,6 +538,7 @@ export default function AdminQuotations() {
               <button onClick={() => setQuickView(q)} className="flex-1 btn-ghost btn-sm justify-center text-xs"><FiEye size={13}/> View</button>
               <button onClick={() => setViewing(q)} className="flex-1 btn-ghost btn-sm justify-center text-xs"><FiFileText size={13}/> Preview</button>
               <button onClick={() => downloadQuotationPdf(q._id, q.quotationNo)} className="flex-1 btn-ghost btn-sm justify-center text-xs"><FiDownload size={13}/> PDF</button>
+              <button onClick={() => shareQuotationWhatsApp(q)} className="flex-1 btn-ghost btn-sm justify-center text-xs text-emerald-600 hover:bg-emerald-50"><FaWhatsapp size={14}/> WhatsApp</button>
               <button onClick={() => { setSendTarget(q); setSendMethods({ email: true, sms: false, link: true }) }} className="flex-1 btn-ghost btn-sm justify-center text-xs"><FiSend size={13}/> Send</button>
               {['draft','sent'].includes(q.status) && (
                 <button onClick={() => openEdit(q)} className="flex-1 btn-ghost btn-sm justify-center text-xs"><FiEdit2 size={13}/> Edit</button>
@@ -560,6 +587,7 @@ export default function AdminQuotations() {
                     <button onClick={() => setQuickView(q)} title="Quick view" className="p-1.5 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg"><FiEye size={13}/></button>
                     <button onClick={() => setViewing(q)} title="Preview & edit" className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"><FiFileText size={13}/></button>
                     <button onClick={() => downloadQuotationPdf(q._id, q.quotationNo)} title="Download PDF" className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"><FiDownload size={13}/></button>
+                    <button onClick={() => shareQuotationWhatsApp(q)} title="Share via WhatsApp" className="p-1.5 text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors"><FaWhatsapp size={13}/></button>
                     <button onClick={() => { setSendTarget(q); setSendMethods({ email: true, sms: false, link: true }) }} title="Send" className="p-1.5 text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg"><FiSend size={13}/></button>
                     {q.status === 'draft' && (
                       <button onClick={() => statusMut.mutate({ id: q._id, status: 'sent' })} title="Mark Sent" className="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors text-xs font-bold">Sent</button>
@@ -1094,7 +1122,7 @@ export default function AdminQuotations() {
                   },
                 }, { onSuccess: () => { setViewing(null); setSendTarget(viewing); setSendMethods({ email: true, sms: false, link: true, pdf: true }) } })
               }}
-              onDownloadPdf={(id) => downloadQuotationPdf(id, viewing?.quotationNo)}
+              onDownloadPdf={(id, no, incSig) => downloadQuotationPdf(id, no || viewing?.quotationNo, incSig)}
             />
           </motion.div>
         </div>,
@@ -1164,9 +1192,14 @@ export default function AdminQuotations() {
               <span className="text-slate-500">Bank branch</span><span>{quickView.bankBranch || quickView.bankAccount?.branchName || '—'}</span>
             </div>
             {quickView.notes && <p className="text-xs text-slate-600 border-t pt-2 line-clamp-3">{quickView.notes}</p>}
-            <button type="button" className="btn-outline w-full justify-center" onClick={() => { setQuickView(null); setViewing(quickView) }}>
-              Open full preview
-            </button>
+            <div className="flex gap-2 pt-2">
+              <button type="button" className="btn-outline flex-1 justify-center text-xs" onClick={() => { setQuickView(null); setViewing(quickView) }}>
+                <FiFileText size={14}/> Open full preview
+              </button>
+              <button type="button" className="btn-primary bg-emerald-600 hover:bg-emerald-700 flex-1 justify-center text-xs text-white" onClick={() => shareQuotationWhatsApp(quickView)}>
+                <FaWhatsapp size={15}/> WhatsApp
+              </button>
+            </div>
           </motion.div>
         </div>,
         document.body

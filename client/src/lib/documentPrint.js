@@ -92,23 +92,51 @@ export function documentPrintStyles() {
   `
 }
 
-export function directorSealBlockHtml({ directorName, sealUrl, forPrint = true }) {
-  if (!directorName && !sealUrl) return ''
-  let src = ''
-  if (sealUrl) {
-    if (sealUrl.startsWith('data:') || sealUrl.startsWith('blob:') || /^https?:\/\//i.test(sealUrl)) {
-      src = sealUrl
-    } else {
-      // Always use absoluteMediaUrl so images work cross-origin (hosted frontend ≠ backend)
-      src = absoluteMediaUrl(sealUrl)
-    }
+export function authorizedSignatureBlockHtml({
+  signatoryName,
+  signatoryTitle = 'Authorized Signatory',
+  signatureUrl,
+  sealUrl,
+  forPrint = true,
+}) {
+  let sigSrc = ''
+  if (signatureUrl) {
+    sigSrc = (signatureUrl.startsWith('data:') || signatureUrl.startsWith('blob:') || /^https?:\/\//i.test(signatureUrl))
+      ? signatureUrl
+      : absoluteMediaUrl(signatureUrl)
   }
+  let sealSrc = ''
+  if (sealUrl) {
+    sealSrc = (sealUrl.startsWith('data:') || sealUrl.startsWith('blob:') || /^https?:\/\//i.test(sealUrl))
+      ? sealUrl
+      : absoluteMediaUrl(sealUrl)
+  }
+
+  const name = signatoryName || 'Authorized Signatory'
+  const title = signatoryTitle || 'Authorized Signatory'
+
   return `
-    <div class="doc-seal-block" style="margin-top:40px;text-align:right;page-break-inside:avoid">
-      ${src ? `<img src="${src.replace(/"/g, '')}" alt="Seal" style="max-height:90px;object-fit:contain;display:inline-block"/>` : ''}
-      ${directorName ? `<p style="margin:10px 0 0;font-weight:700;font-size:11pt;color:#0f172a">${esc(directorName)}</p>` : ''}
-      <p style="margin:4px 0 0;font-size:9pt;color:#64748b">Authorized Signatory</p>
+    <div class="doc-signature-block" style="display:flex;justify-content:flex-end;margin-top:32px;page-break-inside:avoid">
+      <div style="min-width:240px;max-width:320px;text-align:center">
+        ${sigSrc ? `<div style="height:65px;display:flex;align-items:flex-end;justify-content:center;margin-bottom:6px"><img src="${sigSrc.replace(/"/g, '')}" alt="Signature" style="max-height:60px;max-width:220px;object-fit:contain"/></div>` : '<div style="height:45px"></div>'}
+        <div style="border-top:1.5px solid #0f172a;padding-top:6px;margin-bottom:6px">
+          <p style="margin:0;font-weight:700;font-size:10.5pt;color:#0f172a;letter-spacing:0.02em;text-transform:uppercase">${esc(name)}</p>
+          <p style="margin:3px 0 0;font-size:8.5pt;color:#64748b;font-weight:500">${esc(title)}</p>
+        </div>
+        ${sealSrc ? `<div style="margin-top:6px"><img src="${sealSrc.replace(/"/g, '')}" alt="Seal" style="max-height:75px;object-fit:contain;display:inline-block"/></div>` : ''}
+      </div>
     </div>`
+}
+
+export function directorSealBlockHtml({ directorName, sealUrl, signatureUrl, signatoryTitle, forPrint = true }) {
+  if (!directorName && !sealUrl && !signatureUrl) return ''
+  return authorizedSignatureBlockHtml({
+    signatoryName: directorName,
+    signatoryTitle: signatoryTitle || 'Authorized Signatory',
+    signatureUrl,
+    sealUrl,
+    forPrint,
+  })
 }
 
 import { inlineImagesToDataUrls } from './media'

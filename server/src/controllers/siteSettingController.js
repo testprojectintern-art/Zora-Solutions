@@ -65,6 +65,7 @@ exports.getSiteSettings = async (req, res, next) => {
     if (plain.logoUrl) plain.logoUrl = toRelativeUploadUrl(plain.logoUrl);
     if (plain.sealUrl) plain.sealUrl = toRelativeUploadUrl(plain.sealUrl);
     if (plain.letterheadUrl) plain.letterheadUrl = toRelativeUploadUrl(plain.letterheadUrl);
+    if (plain.authorizedSignatureUrl) plain.authorizedSignatureUrl = toRelativeUploadUrl(plain.authorizedSignatureUrl);
     const sigs = plain.signatures || {};
     ['hr', 'admin', 'manager', 'director', 'marketing'].forEach((k) => {
       if (sigs[k]?.url) sigs[k].url = toRelativeUploadUrl(sigs[k].url);
@@ -87,6 +88,14 @@ exports.updateSiteSettings = async (req, res, next) => {
     normalizeUrl('logoUrl');
     normalizeUrl('sealUrl');
     normalizeUrl('letterheadUrl');
+    if ('authorizedSignatureUrl' in body) {
+      const raw = String(body.authorizedSignatureUrl || '').trim();
+      if (raw.startsWith('data:image/')) {
+        body.authorizedSignatureUrl = await compressSignature(raw);
+      } else {
+        body.authorizedSignatureUrl = raw ? toRelativeUploadUrl(raw) : '';
+      }
+    }
 
     if (body.signatures && typeof body.signatures === 'object') {
       const roles = ['hr', 'admin', 'manager', 'director', 'marketing'];

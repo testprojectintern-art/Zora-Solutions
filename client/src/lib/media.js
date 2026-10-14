@@ -73,7 +73,7 @@ export function absoluteMediaUrl(url) {
   if (/^https?:\/\//i.test(path)) return path
 
   const uploadsOrigin = getUploadsOrigin()
-  if (uploadsOrigin) {
+  if (uploadsOrigin && (path.startsWith('/uploads/') || path.startsWith('uploads/'))) {
     return path.startsWith('/') ? `${uploadsOrigin}${path}` : `${uploadsOrigin}/${path}`
   }
 

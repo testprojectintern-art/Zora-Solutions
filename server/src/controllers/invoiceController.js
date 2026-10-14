@@ -611,11 +611,12 @@ exports.sendInvoice = async (req, res, next) => {
     const results = { email: null, sms: null, link: null, pdf: null };
     const client = invoice.client;
 
+    const includeSignature = req.body?.includeSignature === true || req.body?.includeSignature === 'true';
     let pdfBuffer = null;
     if (methods.includes('email') || methods.includes('pdf')) {
       try {
         const { invoiceToPdf } = require('../services/documentPdfService');
-        pdfBuffer = await invoiceToPdf(invoice);
+        pdfBuffer = await invoiceToPdf(invoice, { includeSignature });
         if (methods.includes('pdf')) results.pdf = 'ready';
       } catch (e) {
         console.error('[Invoice] PDF generation failed:', e.message);
@@ -691,7 +692,8 @@ exports.downloadInvoicePdf = async (req, res, next) => {
 
     const { buildInvoiceDocumentHtml, bankLabelFromAccount, inlineUploadImagesInHtml } = require('../services/documentHtmlService');
     const bankLabel = bankLabelFromAccount(invoice.bankAccount);
-    const html = await buildInvoiceDocumentHtml(invoice, { bankLabel });
+    const includeSignature = req.query.includeSignature === 'true';
+    const html = await buildInvoiceDocumentHtml(invoice, { bankLabel, includeSignature });
     const inlinedHtml = inlineUploadImagesInHtml(html);
 
     if (req.query.html === 'true') {

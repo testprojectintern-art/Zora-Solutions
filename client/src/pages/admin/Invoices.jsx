@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import api from '../../lib/api'
 import toast from 'react-hot-toast'
 import { FiPlus, FiX, FiCreditCard, FiSearch, FiEdit2, FiTrash2, FiSend, FiEye, FiFileText, FiRefreshCw, FiExternalLink } from 'react-icons/fi'
+import { FaWhatsapp } from 'react-icons/fa'
 import InvoiceDetail from './InvoiceDetail'
 import InvoicePreviewPanel from '../../components/documents/InvoicePreviewPanel'
 import { buildInvoiceDraft } from '../../lib/buildInvoiceDraft'
@@ -181,10 +182,10 @@ export default function AdminInvoices() {
     }
   }
 
-  const downloadPdf = async (id, invoiceNo) => {
+  const downloadPdf = async (id, invoiceNo, includeSignature = false) => {
     try {
       const { htmlStringToPdfDownload } = await import('../../lib/pdfGenerator')
-      const res = await api.get(`/invoices/${id}/pdf?html=true&t=${Date.now()}`, { responseType: 'text' })
+      const res = await api.get(`/invoices/${id}/pdf?html=true${includeSignature ? '&includeSignature=true' : ''}&t=${Date.now()}`, { responseType: 'text' })
       const htmlStr = typeof res.data === 'string' ? res.data : await res.data.text()
       const fname = `${invoiceNo || 'invoice'}.pdf`
       toast.loading('Generating PDF...', { id: 'pdf-toast' })
@@ -193,6 +194,31 @@ export default function AdminInvoices() {
     } catch (err) {
       console.error(err)
       toast.error('PDF download failed', { id: 'pdf-toast' })
+    }
+  }
+
+  const shareInvoiceWhatsApp = async (inv, includeSignature = false) => {
+    try {
+      const { shareDocumentViaWhatsApp } = await import('../../lib/documentShare')
+      const res = await api.get(`/invoices/${inv._id}/pdf?html=true${includeSignature ? '&includeSignature=true' : ''}&t=${Date.now()}`, { responseType: 'text' })
+      const htmlStr = typeof res.data === 'string' ? res.data : await res.data.text()
+      await shareDocumentViaWhatsApp({
+        htmlString: htmlStr,
+        filename: `${inv.invoiceNo || 'invoice'}.pdf`,
+        docType: 'Invoice',
+        docNo: inv.invoiceNo,
+        clientName: inv.client?.name,
+        clientPhone: inv.client?.phone,
+        amount: formatMoney(inv.total || 0, inv.currency || 'LKR'),
+        date: inv.invoiceDate ? new Date(inv.invoiceDate).toLocaleDateString('en-LK') : '',
+        dueDate: inv.dueDate ? new Date(inv.dueDate).toLocaleDateString('en-LK') : '',
+        companyName: siteSettings?.siteName || 'Zora Solutions',
+        companyPhone: siteSettings?.contactPhone || '0777498608',
+        companyEmail: siteSettings?.adminEmail || siteSettings?.contactEmail || 'zorasolutions.official@gmail.com',
+      })
+    } catch (err) {
+      console.error(err)
+      toast.error('Failed to prepare invoice for WhatsApp')
     }
   }
 
@@ -604,6 +630,7 @@ export default function AdminInvoices() {
             <div className="flex flex-wrap gap-1.5 pt-1 border-t border-slate-100">
               <button onClick={() => setViewInvoiceId(inv._id)} className="flex-1 btn-ghost btn-sm justify-center text-xs"><FiEye size={13}/> Details</button>
               <button onClick={() => { setViewingInv(inv); setSendMethods({ email: true, sms: false, link: true, pdf: true }) }} className="flex-1 btn-ghost btn-sm justify-center text-xs"><FiFileText size={13}/> Preview</button>
+              <button type="button" onClick={() => shareInvoiceWhatsApp(inv)} className="flex-1 btn-ghost btn-sm justify-center text-xs text-emerald-600 hover:bg-emerald-50"><FaWhatsapp size={14}/> WhatsApp</button>
               <button type="button" onClick={() => openEdit(inv)} className="flex-1 btn-ghost btn-sm justify-center text-xs"><FiEdit2 size={13}/> Edit</button>
               <button type="button" onClick={() => { setSendTarget(inv); setSendMethods({ email: true, sms: false, link: true, pdf: true }) }} className="flex-1 btn-ghost btn-sm justify-center text-xs"><FiSend size={13}/> Send</button>
               <button type="button" onClick={() => setDeletePending(inv)} className="flex-1 btn-ghost btn-sm justify-center text-xs text-red-500 hover:bg-red-50"><FiTrash2 size={13}/> Delete</button>
@@ -644,6 +671,7 @@ export default function AdminInvoices() {
                   <div className="flex gap-1 items-center">
                     <button onClick={() => setViewInvoiceId(inv._id)} className="p-1.5 text-gray-400 hover:text-blue-500 hover:bg-blue-50 rounded-lg" title="Payments & details"><FiEye size={14}/></button>
                     <button onClick={() => { setViewingInv(inv); setSendMethods({ email: true, sms: false, link: true, pdf: true }) }} className="p-1.5 text-gray-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg" title="Document preview"><FiFileText size={13}/></button>
+                    <button type="button" onClick={() => shareInvoiceWhatsApp(inv)} className="p-1.5 text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg transition-colors" title="Share via WhatsApp"><FaWhatsapp size={14}/></button>
                     <button type="button" onClick={() => openEdit(inv)} className="p-1.5 text-gray-400 hover:text-secondary hover:bg-blue-50 rounded-lg" title="Edit"><FiEdit2 size={13}/></button>
                     <button type="button" onClick={() => { setSendTarget(inv); setSendMethods({ email: true, sms: false, link: true, pdf: true }) }} className="p-1.5 text-gray-400 hover:text-emerald-600 hover:bg-emerald-50 rounded-lg" title="Send"><FiSend size={13}/></button>
                     <button type="button" onClick={() => setDeletePending(inv)} className="p-1.5 text-gray-400 hover:text-red-500 hover:bg-red-50 rounded-lg" title="Delete"><FiTrash2 size={13}/></button>

@@ -53,13 +53,27 @@ function localFileToDataUri(uploadPath) {
       } catch { /* ignore */ }
     }
 
-    const filePath = path.join(getUploadsRoot(), relPath);
-    if (fs.existsSync(filePath)) {
-      const data = fs.readFileSync(filePath);
-      const ext = path.extname(filePath).toLowerCase().replace('.', '');
-      const mimeMap = { png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg', gif: 'image/gif', webp: 'image/webp', svg: 'image/svg+xml' };
-      const mime = mimeMap[ext] || 'image/png';
-      return `data:${mime};base64,${data.toString('base64')}`;
+    const cleanRel = relPath.replace(/^\/+/, '');
+
+    const candidatePaths = [
+      path.join(getUploadsRoot(), cleanRel),
+      path.resolve(__dirname, '../assets', cleanRel),
+      path.resolve(__dirname, '../assets/logo.png'),
+      path.resolve(process.cwd(), 'client/public', cleanRel),
+      path.resolve(process.cwd(), 'client/dist', cleanRel),
+      path.resolve(process.cwd(), 'client/public/logo.png'),
+      path.resolve(__dirname, '../../../client/public', cleanRel),
+      path.resolve(__dirname, '../../../client/public/logo.png'),
+    ];
+
+    for (const filePath of candidatePaths) {
+      if (fs.existsSync(filePath) && fs.statSync(filePath).isFile()) {
+        const data = fs.readFileSync(filePath);
+        const ext = path.extname(filePath).toLowerCase().replace('.', '');
+        const mimeMap = { png: 'image/png', jpg: 'image/jpeg', jpeg: 'image/jpeg', gif: 'image/gif', webp: 'image/webp', svg: 'image/svg+xml' };
+        const mime = mimeMap[ext] || 'image/png';
+        return `data:${mime};base64,${data.toString('base64')}`;
+      }
     }
   } catch { /* fallback to URL */ }
 
@@ -67,12 +81,13 @@ function localFileToDataUri(uploadPath) {
 }
 
 function buildLetterhead(settings) {
-  const name = settings.siteName || 'Company';
+  const name = settings.siteName || 'Zora Solutions';
   const tagline = settings.letterheadTagline || settings.siteDescription || 'Next Level Tech';
-  const logo = settings.logoUrl ? localFileToDataUri(settings.logoUrl) : '';
+  let logo = settings.logoUrl ? localFileToDataUri(settings.logoUrl) : '';
+  if (!logo) logo = localFileToDataUri('logo.png');
   const logoHtml = logo
-    ? `<img src="${logo.replace(/"/g, '')}" alt="" style="max-height:64px;object-fit:contain"/>`
-    : `<span style="font-weight:800;font-size:22px;color:#1e3a8a">${esc((name || 'C').charAt(0))}</span>`;
+    ? `<img src="${logo.replace(/"/g, '')}" alt="Logo" style="max-height:56px;max-width:200px;object-fit:contain;display:block"/>`
+    : `<span style="font-weight:900;font-size:24px;color:#032d60">${esc(name)}</span>`;
 
   const lines = [];
   if (settings.contactAddress) lines.push({ label: 'Address', text: settings.contactAddress });
@@ -86,8 +101,8 @@ function buildLetterhead(settings) {
       <tbody>
         ${lines.map((l) => `
           <tr>
-            <td style="padding:2px 8px 2px 0;color:#38bdf8;font-weight:600;text-align:right;vertical-align:top;white-space:nowrap">${esc(l.label)}</td>
-            <td style="padding:2px 0;vertical-align:top;white-space:pre-wrap;color:#475569">${esc(l.text)}</td>
+            <td style="padding:2px 8px 2px 0;color:#0284c7;font-weight:700;text-align:right;vertical-align:top;white-space:nowrap">${esc(l.label)}:</td>
+            <td style="padding:2px 0;vertical-align:top;white-space:pre-wrap;color:#334155">${esc(l.text)}</td>
           </tr>
         `).join('')}
       </tbody>
@@ -95,12 +110,12 @@ function buildLetterhead(settings) {
   ` : '';
 
   return `
-    <header style="display:flex;align-items:flex-start;justify-content:space-between;padding-bottom:18px;border-bottom:3px solid #0ea5e9;margin-bottom:24px">
+    <header style="display:flex;align-items:flex-start;justify-content:space-between;padding-bottom:18px;border-bottom:3px solid #0284c7;margin-bottom:24px">
       <div style="display:flex;align-items:center;gap:16px;">
         <div style="flex-shrink:0">${logoHtml}</div>
         <div>
           <h1 style="margin:0;font-size:24px;font-weight:900;color:#0f172a;letter-spacing:-0.02em;line-height:1.2;word-break:break-word">${esc(name)}</h1>
-          ${tagline ? `<p style="margin:4px 0 0;font-size:11pt;font-weight:500;color:#38bdf8">${esc(tagline)}</p>` : ''}
+          ${tagline ? `<p style="margin:4px 0 0;font-size:11pt;font-weight:600;color:#0284c7">${esc(tagline)}</p>` : ''}
         </div>
       </div>
       <div style="text-align:right;flex-shrink:0;padding-top:4px;">${contactHtml}</div>
@@ -224,7 +239,7 @@ async function getSettings() {
   return s || {};
 }
 
-async function buildQuotationDocumentHtml(quotation, { bankLabel } = {}) {
+async function buildQuotationDocumentHtml(quotation, { bankLabel, includeSignature = false } = {}) {
   const settings = await getSettings();
   const q = quotation;
   const currency = q.currency || 'LKR';
@@ -235,15 +250,30 @@ async function buildQuotationDocumentHtml(quotation, { bankLabel } = {}) {
       : PAYMENT_LABELS[q.paymentMethod] || q.paymentMethod || '';
   const thanks = settings.quotationThankYouMessage || 'We appreciate your business and look forward to the opportunity to work with you. Should you have any questions regarding this quotation, please do not hesitate to contact us.';
   const roleProfile = settings.signatures?.[q.directorRole] || null;
-  const directorName = q.directorName || roleProfile?.label || settings.quotationDirectorName || '';
-  const sealUrl = q.directorSealUrl || roleProfile?.url || settings.sealUrl;
+  const signatoryName = settings.authorizedSignatoryName || q.directorName || roleProfile?.label || settings.quotationDirectorName || '';
+  const signatoryTitle = settings.authorizedSignatoryTitle || 'Authorized Signatory';
+  const signatureUrl = settings.authorizedSignatureUrl || roleProfile?.url || '';
+  const sealUrl = q.directorSealUrl || settings.sealUrl || '';
   const prepared = q.preparedBy || q.generatedBy?.name || '';
-  const showSeal = q.showSeal !== false;
+  const shouldIncludeSignature = Boolean(includeSignature);
 
   /* Split terms into numbered lines for modern display */
   const termsLines = (q.terms || '').split('\n').map(l => l.trim()).filter(Boolean);
   const termsOlHtml = termsLines.length > 0
     ? termsLines.map(l => `<li style="padding-left:4px;margin-bottom:5px">${esc(l)}</li>`).join('')
+    : '';
+
+  const signaturesHtml = (shouldIncludeSignature && (signatoryName || signatureUrl || sealUrl))
+    ? `<div style="display:flex;justify-content:flex-end;margin-top:32px;page-break-inside:avoid">
+        <div style="min-width:240px;max-width:320px;text-align:center">
+          ${signatureUrl ? `<div style="height:65px;display:flex;align-items:flex-end;justify-content:center;margin-bottom:6px"><img src="${localFileToDataUri(signatureUrl).replace(/"/g, '')}" alt="Signature" style="max-height:60px;max-width:220px;object-fit:contain"/></div>` : '<div style="height:45px"></div>'}
+          <div style="border-top:1.5px solid #0f172a;padding-top:6px;margin-bottom:6px">
+            <p style="margin:0;font-weight:700;font-size:10.5pt;color:#0f172a;letter-spacing:0.02em;text-transform:uppercase">${esc(signatoryName || 'Authorized Signatory')}</p>
+            <p style="margin:3px 0 0;font-size:8.5pt;color:#64748b;font-weight:500">${esc(signatoryTitle || 'Authorized Signatory')}</p>
+          </div>
+          ${sealUrl ? `<div style="margin-top:6px"><img src="${localFileToDataUri(sealUrl).replace(/"/g, '')}" alt="Seal" style="max-height:75px;object-fit:contain;display:inline-block"/></div>` : ''}
+        </div>
+      </div>`
     : '';
 
   const body = `
@@ -283,13 +313,7 @@ async function buildQuotationDocumentHtml(quotation, { bankLabel } = {}) {
         <p style="margin:0 0 6px;font-size:8.5pt;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.05em">Notes</p>
         <p style="margin:0;white-space:pre-wrap;color:#475569;line-height:1.5">${esc(q.notes)}</p>
       </div>` : ''}
-      <!-- Director seal -->
-      ${showSeal && (directorName || sealUrl) ? `
-        <div style="margin-top:20px;text-align:right;page-break-inside:avoid">
-          ${directorName ? `<p style="font-weight:700;margin:0 0 8px;font-size:11pt;color:#0f172a">${esc(directorName)}</p>` : ''}
-          ${sealUrl ? `<img src="${localFileToDataUri(sealUrl).replace(/"/g, '')}" style="max-height:90px;object-fit:contain"/>` : ''}
-          <p style="margin:8px 0 0;font-size:9pt;color:#64748b">Authorized Signatory</p>
-        </div>` : ''}
+      ${signaturesHtml}
       <!-- Reference -->
       ${(showRefOnDocument && q.quotationNo) ? `<p style="text-align:right;font-size:8.5pt;color:#94a3b8;margin-top:14px;letter-spacing:0.04em">Ref: ${esc(q.quotationNo)}</p>` : ''}
       <!-- Terms & Conditions — modern card at the very bottom -->
@@ -321,7 +345,7 @@ async function buildQuotationDocumentHtml(quotation, { bankLabel } = {}) {
   return `<!DOCTYPE html><html><head><meta charset="utf-8"/>${pageCss}</head><body style="margin:0;background:#fff"><div style="padding:14mm">${body}</div></body></html>`;
 }
 
-async function buildInvoiceDocumentHtml(invoice) {
+async function buildInvoiceDocumentHtml(invoice, { bankLabel, includeSignature = false } = {}) {
   const settings = await getSettings();
   const inv = invoice;
   const currency = inv.currency || 'LKR';
@@ -329,35 +353,29 @@ async function buildInvoiceDocumentHtml(invoice) {
     inv.paymentMethod === 'custom'
       ? inv.paymentMethodCustom || 'Custom'
       : PAYMENT_LABELS[inv.paymentMethod] || inv.paymentMethod || '';
-  const bankLabel = inv.bankAccount
+  const bankAccountLabel = bankLabel || (inv.bankAccount
     ? `${inv.bankAccount.bankName || ''} · ${inv.bankAccount.accountNumber || ''}`.trim()
-    : '';
+    : '');
 
-  const sigAuth = inv.signatures?.authorizer;
-  const sigSeal = inv.signatures?.seal;
   const roleProfile = settings.signatures?.[inv.directorRole] || null;
-  const directorName = inv.directorName || roleProfile?.label || settings.quotationDirectorName || '';
-  const sealUrl = inv.directorSealUrl || roleProfile?.url || settings.sealUrl || '';
+  const signatoryName = inv.signatures?.authorizer?.name || settings.authorizedSignatoryName || inv.directorName || roleProfile?.label || settings.quotationDirectorName || '';
+  const signatoryTitle = inv.signatures?.authorizer?.title || settings.authorizedSignatoryTitle || 'Authorized Signatory';
+  const signatureUrl = inv.signatures?.authorizer?.data || settings.authorizedSignatureUrl || roleProfile?.url || '';
+  const sealUrl = inv.signatures?.seal?.data || inv.directorSealUrl || settings.sealUrl || '';
+  const shouldIncludeSignature = Boolean(includeSignature);
 
-  const signaturesHtml = (sigAuth?.data || sigSeal?.data)
-    ? `<div style="display:flex;justify-content:flex-end;margin-top:40px;page-break-inside:avoid">
-        <div style="width:260px;text-align:center">
-          ${sigAuth?.data ? `<img src="${localFileToDataUri(sigAuth.data).replace(/"/g, '')}" style="max-height:70px;margin-bottom:8px;display:block;margin-inline:auto"/>` : '<div style="height:70px"></div>'}
-          <div style="border-top:2px solid #0f172a;padding-top:8px;margin-bottom:16px">
-            <p style="margin:0;font-weight:700;font-size:10pt;text-transform:uppercase">${esc(sigAuth?.name || 'Authorized Signatory')}</p>
-            ${sigAuth?.title ? `<p style="margin:4px 0 0;font-size:8.5pt;color:#64748b">${esc(sigAuth.title)}</p>` : ''}
+  const signaturesHtml = (shouldIncludeSignature && (signatoryName || signatureUrl || sealUrl))
+    ? `<div style="display:flex;justify-content:flex-end;margin-top:32px;page-break-inside:avoid">
+        <div style="min-width:240px;max-width:320px;text-align:center">
+          ${signatureUrl ? `<div style="height:65px;display:flex;align-items:flex-end;justify-content:center;margin-bottom:6px"><img src="${localFileToDataUri(signatureUrl).replace(/"/g, '')}" alt="Signature" style="max-height:60px;max-width:220px;object-fit:contain"/></div>` : '<div style="height:45px"></div>'}
+          <div style="border-top:1.5px solid #0f172a;padding-top:6px;margin-bottom:6px">
+            <p style="margin:0;font-weight:700;font-size:10.5pt;color:#0f172a;letter-spacing:0.02em;text-transform:uppercase">${esc(signatoryName || 'Authorized Signatory')}</p>
+            <p style="margin:3px 0 0;font-size:8.5pt;color:#64748b;font-weight:500">${esc(signatoryTitle || 'Authorized Signatory')}</p>
           </div>
-          ${sigSeal?.data ? `<img src="${localFileToDataUri(sigSeal.data).replace(/"/g, '')}" style="max-height:110px;display:block;margin-inline:auto"/>` : ''}
-          ${sigSeal?.note ? `<p style="margin:8px 0 0;font-size:8.5pt;color:#64748b;font-style:italic">${esc(sigSeal.note)}</p>` : ''}
+          ${sealUrl ? `<div style="margin-top:6px"><img src="${localFileToDataUri(sealUrl).replace(/"/g, '')}" alt="Seal" style="max-height:75px;object-fit:contain;display:inline-block"/></div>` : ''}
         </div>
       </div>`
-    : (directorName || sealUrl)
-      ? `<div style="margin-top:20px;text-align:right;page-break-inside:avoid">
-          ${directorName ? `<p style="font-weight:700;margin:0 0 8px;font-size:11pt">${esc(directorName)}</p>` : ''}
-          ${sealUrl ? `<img src="${localFileToDataUri(sealUrl).replace(/"/g, '')}" style="max-height:90px;object-fit:contain"/>` : ''}
-          <p style="margin:8px 0 0;font-size:9pt;color:#64748b">Authorized Signatory</p>
-        </div>`
-      : '';
+    : '';
 
   const body = `
     ${buildLetterhead(settings)}

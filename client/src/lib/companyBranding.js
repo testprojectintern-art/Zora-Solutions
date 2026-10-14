@@ -24,6 +24,9 @@ export function buildCompanyFromSettings(settings = {}) {
     seal: settings.sealUrl ? mediaUrl(settings.sealUrl) : '',
     letterhead: settings.letterheadUrl ? mediaUrl(settings.letterheadUrl) : '',
     signatures: settings.signatures || {},
+    authorizedSignatureUrl: settings.authorizedSignatureUrl ? mediaUrl(settings.authorizedSignatureUrl) : '',
+    authorizedSignatoryName: settings.authorizedSignatoryName || settings.quotationDirectorName || '',
+    authorizedSignatoryTitle: settings.authorizedSignatoryTitle || 'Authorized Signatory',
   }
 }
 
@@ -71,12 +74,9 @@ function escapeHtml(s) {
 
 /** Logo img HTML — use forPrint=true in print/PDF */
 export function companyLogoHtml(company, { forPrint = false, maxHeight = 56 } = {}) {
-  const raw = company.logoPath || company.logo
-  const src = forPrint ? absoluteMediaUrl(raw) : company.logo || mediaUrl(raw)
-  if (!src) {
-    return `<span style="display:inline-flex;width:52px;height:52px;border-radius:10px;background:#1e3a8a;color:#fff;align-items:center;justify-content:center;font-weight:800;font-size:22px">${escapeHtml((company.name || 'C').charAt(0))}</span>`
-  }
-  return `<img src="${src.replace(/"/g, '')}" alt="" style="max-height:${maxHeight}px;max-width:200px;object-fit:contain;display:block"/>`
+  const raw = company.logoPath || company.logo || '/logo.png'
+  const src = forPrint ? absoluteMediaUrl(raw) : company.logo || mediaUrl(raw) || '/logo.png'
+  return `<img src="${(src || '/logo.png').replace(/"/g, '')}" alt="Logo" style="max-height:${maxHeight}px;max-width:200px;object-fit:contain;display:block"/>`
 }
 
 /** HTML letterhead block for print/PDF */

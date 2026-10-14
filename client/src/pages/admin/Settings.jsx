@@ -18,10 +18,12 @@ export default function AdminSettings() {
   const [avatarFile, setAvatarFile] = useState(null)
   const [logoFile, setLogoFile] = useState(null)
   const [sealFile, setSealFile] = useState(null)
+  const [authorizedSigFile, setAuthorizedSigFile] = useState(null)
   const [sigFiles, setSigFiles] = useState({ hr: null, admin: null, manager: null })
   const [avatarToRemove, setAvatarToRemove] = useState(false)
   const [logoToRemove, setLogoToRemove] = useState(false)
   const [sealToRemove, setSealToRemove] = useState(false)
+  const [authorizedSigToRemove, setAuthorizedSigToRemove] = useState(false)
 
   const { register: reg1, handleSubmit: hs1, formState: { isSubmitting: isSubmittingProfile } } = useForm({
     values: { name: user?.name, phone: user?.phone }
@@ -67,6 +69,9 @@ export default function AdminSettings() {
       whatsappNumber: siteData?.settings?.whatsappNumber || '',
       websiteUrl: siteData?.settings?.websiteUrl || '',
       sealUrl: siteData?.settings?.sealUrl || '',
+      authorizedSignatureUrl: siteData?.settings?.authorizedSignatureUrl || '',
+      authorizedSignatoryName: siteData?.settings?.authorizedSignatoryName || '',
+      authorizedSignatoryTitle: siteData?.settings?.authorizedSignatoryTitle || 'Authorized Signatory',
       signatures: {
         hr: { url: siteData?.settings?.signatures?.hr?.url || '', label: siteData?.settings?.signatures?.hr?.label || 'HR' },
         admin: { url: siteData?.settings?.signatures?.admin?.url || '', label: siteData?.settings?.signatures?.admin?.label || 'Admin' },
@@ -111,6 +116,8 @@ export default function AdminSettings() {
       toast.success('Site settings updated')
       setLogoFile(null)
       setLogoToRemove(false)
+      setAuthorizedSigFile(null)
+      setAuthorizedSigToRemove(false)
       qc.setQueryData(SITE_SETTINGS_QUERY_KEY, data)
       const savedLogo = (data?.settings?.logoUrl ?? variables?.logoUrl ?? '').trim()
       const v = data?.settings?.updatedAt
@@ -293,6 +300,11 @@ export default function AdminSettings() {
               const uploaded = await uploadImage(sealFile)
               if (uploaded) sealUrl = uploaded
             }
+            let authorizedSignatureUrl = authorizedSigToRemove ? '' : (d.authorizedSignatureUrl || '').trim()
+            if (authorizedSigFile) {
+              const uploaded = await uploadImage(authorizedSigFile)
+              if (uploaded) authorizedSignatureUrl = uploaded
+            }
             const signatures = { ...(d.signatures || {}) }
             for (const key of ['director', 'admin', 'manager', 'hr', 'marketing']) {
               if (sigFiles[key]) {
@@ -300,7 +312,7 @@ export default function AdminSettings() {
                 if (uploaded) signatures[key] = { ...signatures[key], url: uploaded }
               }
             }
-            siteMut.mutate({ ...d, logoUrl, sealUrl, signatures })
+            siteMut.mutate({ ...d, logoUrl, sealUrl, signatures, authorizedSignatureUrl })
           } catch (e) {
             toast.error(e.message)
           }
@@ -384,6 +396,69 @@ export default function AdminSettings() {
                 <input type="checkbox" {...reg3('quotationLayoutShowRefOnDocument')} />
                 Show quotation reference on document
               </label>
+            </div>
+          </div>
+
+          {/* Official Authorized Signature & Signatory */}
+          <div className="border border-blue-100 bg-blue-50/40 p-4 sm:p-5 rounded-xl mt-4">
+            <div className="flex items-center gap-2 mb-1">
+              <span className="w-2.5 h-2.5 rounded-full bg-blue-600"></span>
+              <h4 className="font-bold text-sm text-slate-800">Official Authorized Signature (Quotations &amp; Invoices)</h4>
+            </div>
+            <p className="text-xs text-gray-500 mb-4">
+              Upload your official signature image here. When downloading or sharing a Quotation or Invoice via WhatsApp, you can optionally include this signature on the generated PDF.
+            </p>
+
+            <div className="grid md:grid-cols-2 gap-4 mb-4">
+              <div>
+                <label className="form-label">Signatory Name</label>
+                <input {...reg3('authorizedSignatoryName')} placeholder="e.g. Dilum V." className="form-input bg-white" />
+              </div>
+              <div>
+                <label className="form-label">Signatory Title / Designation</label>
+                <input {...reg3('authorizedSignatoryTitle')} placeholder="e.g. Managing Director / Authorized Signatory" className="form-input bg-white" />
+              </div>
+            </div>
+
+            <div className="flex flex-col gap-2">
+              <label className="form-label">Signature Image (PNG / Transparent recommended)</label>
+              <div className="flex flex-wrap items-center gap-4">
+                <div className="w-48 h-20 rounded-lg bg-white border border-dashed border-gray-300 flex items-center justify-center p-2 shadow-sm">
+                  {authorizedSigFile ? (
+                    <img src={URL.createObjectURL(authorizedSigFile)} alt="Preview" className="max-h-full object-contain" />
+                  ) : (!authorizedSigToRemove && siteData?.settings?.authorizedSignatureUrl) ? (
+                    <img src={mediaUrl(siteData.settings.authorizedSignatureUrl)} alt="Signature" className="max-h-full object-contain" />
+                  ) : (
+                    <span className="text-xs text-gray-400 italic">No signature uploaded</span>
+                  )}
+                </div>
+                <div className="flex flex-col gap-2">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="text-sm file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-600/10 file:text-blue-700 hover:file:bg-blue-600/20 transition-all cursor-pointer"
+                    onChange={(e) => {
+                      setAuthorizedSigFile(e.target.files?.[0] || null)
+                      setAuthorizedSigToRemove(false)
+                    }}
+                  />
+                  {((!authorizedSigToRemove && siteData?.settings?.authorizedSignatureUrl) || authorizedSigFile) && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (window.confirm('Are you sure you want to remove the authorized signature?')) {
+                          setAuthorizedSigToRemove(true)
+                          setAuthorizedSigFile(null)
+                          setSiteValue('authorizedSignatureUrl', '')
+                        }
+                      }}
+                      className="text-xs text-red-500 hover:text-red-600 font-medium w-fit"
+                    >
+                      Remove Signature
+                    </button>
+                  )}
+                </div>
+              </div>
             </div>
           </div>
           <div className="grid md:grid-cols-5 gap-4">

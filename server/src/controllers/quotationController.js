@@ -410,11 +410,12 @@ exports.sendQuotation = async (req, res, next) => {
     const results = { email: null, sms: null, link: null, pdf: null };
     const client = quotation.client;
 
+    const includeSignature = req.body?.includeSignature === true || req.body?.includeSignature === 'true';
     let pdfBuffer = null;
     if (methods.includes('email') || methods.includes('pdf')) {
       try {
         const { quotationToPdf } = require('../services/documentPdfService');
-        pdfBuffer = await quotationToPdf(quotation);
+        pdfBuffer = await quotationToPdf(quotation, { includeSignature });
         if (methods.includes('pdf')) results.pdf = 'ready';
       } catch (e) {
         console.error('[Quotation] PDF generation failed:', e.message);
@@ -495,7 +496,8 @@ exports.downloadQuotationPdf = async (req, res, next) => {
 
     const { buildQuotationDocumentHtml, bankLabelFromAccount, inlineUploadImagesInHtml } = require('../services/documentHtmlService');
     const bankLabel = bankLabelFromAccount(quotation.bankAccount);
-    const html = await buildQuotationDocumentHtml(quotation, { bankLabel });
+    const includeSignature = req.query.includeSignature === 'true';
+    const html = await buildQuotationDocumentHtml(quotation, { bankLabel, includeSignature });
     const inlinedHtml = inlineUploadImagesInHtml(html);
 
     if (req.query.html === 'true') {

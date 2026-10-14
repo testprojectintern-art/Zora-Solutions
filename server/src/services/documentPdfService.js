@@ -77,14 +77,15 @@ async function htmlToPdfBuffer(html) {
   }
 }
 
-async function quotationToPdf(quotation) {
+async function quotationToPdf(quotation, options = {}) {
   const bankLabel = bankLabelFromAccount(quotation.bankAccount);
-  const html = await buildQuotationDocumentHtml(quotation, { bankLabel });
+  const html = await buildQuotationDocumentHtml(quotation, { bankLabel, ...options });
   return htmlToPdfBuffer(html);
 }
 
-async function invoiceToPdf(invoice) {
-  const html = await buildInvoiceDocumentHtml(invoice);
+async function invoiceToPdf(invoice, options = {}) {
+  const bankLabel = bankLabelFromAccount(invoice.bankAccount);
+  const html = await buildInvoiceDocumentHtml(invoice, { bankLabel, ...options });
   return htmlToPdfBuffer(html);
 }
 

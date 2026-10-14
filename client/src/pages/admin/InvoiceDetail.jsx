@@ -6,6 +6,8 @@ import { useForm } from 'react-hook-form'
 import api from '../../lib/api'
 import toast from 'react-hot-toast'
 import { FiX, FiPrinter, FiDollarSign, FiCreditCard, FiCalendar, FiClock, FiCheckCircle, FiAlertTriangle, FiFileText, FiDownload } from 'react-icons/fi'
+import { FaWhatsapp } from 'react-icons/fa'
+import { formatMoney } from '../../lib/currencies'
 import { printHtmlContent } from '../../lib/documentPrint'
 import { layoutPrintExtraCss, loadQuotationLayout } from '../../lib/quotationPrintLayout'
 import InvoicePrintBody from '../../components/documents/InvoicePrintBody'
@@ -137,10 +139,10 @@ export default function InvoiceDetail({ invoiceId, onClose }) {
     }
   }
 
-  const downloadInvoicePdf = async (id, invoiceNo) => {
+  const downloadInvoicePdf = async (id, invoiceNo, includeSignature = false) => {
     try {
       const { htmlStringToPdfDownload } = await import('../../lib/pdfGenerator')
-      const res = await api.get(`/invoices/${id}/pdf?html=true&t=${Date.now()}`, { responseType: 'text' })
+      const res = await api.get(`/invoices/${id}/pdf?html=true${includeSignature ? '&includeSignature=true' : ''}&t=${Date.now()}`, { responseType: 'text' })
       const htmlStr = typeof res.data === 'string' ? res.data : await res.data.text()
       const fname = `Invoice_${invoiceNo}.pdf`
       toast.loading('Generating PDF...', { id: 'pdf-toast' })
@@ -149,6 +151,31 @@ export default function InvoiceDetail({ invoiceId, onClose }) {
     } catch (e) {
       console.error(e)
       toast.error('Failed to download PDF', { id: 'pdf-toast' })
+    }
+  }
+
+  const shareInvoiceWhatsApp = async (inv, includeSignature = false) => {
+    try {
+      const { shareDocumentViaWhatsApp } = await import('../../lib/documentShare')
+      const res = await api.get(`/invoices/${inv._id}/pdf?html=true${includeSignature ? '&includeSignature=true' : ''}&t=${Date.now()}`, { responseType: 'text' })
+      const htmlStr = typeof res.data === 'string' ? res.data : await res.data.text()
+      await shareDocumentViaWhatsApp({
+        htmlString: htmlStr,
+        filename: `Invoice_${inv.invoiceNo}.pdf`,
+        docType: 'Invoice',
+        docNo: inv.invoiceNo,
+        clientName: inv.client?.name,
+        clientPhone: inv.client?.phone,
+        amount: formatMoney(inv.total || 0, inv.currency || 'LKR'),
+        date: inv.invoiceDate ? new Date(inv.invoiceDate).toLocaleDateString('en-LK') : '',
+        dueDate: inv.dueDate ? new Date(inv.dueDate).toLocaleDateString('en-LK') : '',
+        companyName: site.siteName || 'Zora Solutions',
+        companyPhone: site.contactPhone || '0777498608',
+        companyEmail: site.adminEmail || site.contactEmail || 'zorasolutions.official@gmail.com',
+      })
+    } catch (err) {
+      console.error(err)
+      toast.error('Failed to prepare invoice for WhatsApp')
     }
   }
 
@@ -183,6 +210,7 @@ export default function InvoiceDetail({ invoiceId, onClose }) {
                 </button>
               )}
               <button type="button" onClick={() => downloadInvoicePdf(inv._id, inv.invoiceNo)} className="btn-primary btn-sm shrink-0 whitespace-nowrap"><FiDownload size={14}/> PDF</button>
+              <button type="button" onClick={() => shareInvoiceWhatsApp(inv)} className="btn-primary bg-emerald-600 hover:bg-emerald-700 text-white btn-sm shrink-0 whitespace-nowrap"><FaWhatsapp size={14}/> WhatsApp</button>
               <button type="button" onClick={() => { setActiveTab('Overview'); setTimeout(handlePrint, 100) }} className="btn-outline border-white/30 text-white hover:bg-white/10 btn-sm shrink-0 whitespace-nowrap"><FiPrinter size={14}/> Print</button>
             </div>
           </div>
@@ -368,6 +396,13 @@ export default function InvoiceDetail({ invoiceId, onClose }) {
             className="flex-1 flex items-center justify-center gap-1.5 bg-primary text-white text-sm font-semibold py-2.5 rounded-xl hover:bg-primary/90 active:scale-95 transition-all"
           >
             <FiDownload size={15}/> PDF
+          </button>
+          <button
+            type="button"
+            onClick={() => shareInvoiceWhatsApp(inv)}
+            className="flex-1 flex items-center justify-center gap-1.5 bg-emerald-600 text-white text-sm font-semibold py-2.5 rounded-xl hover:bg-emerald-700 active:scale-95 transition-all shadow-sm"
+          >
+            <FaWhatsapp size={15}/> WhatsApp
           </button>
           <button
             type="button"
