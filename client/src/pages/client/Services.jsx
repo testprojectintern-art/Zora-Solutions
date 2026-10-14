@@ -144,7 +144,7 @@ function PackageCard({ pkg, delay = 0 }) {
             </li>
           ))}
         </ul>
-        <a href="mailto:info@raxwo.com" className={`w-full py-3.5 rounded-xl text-sm font-bold text-center transition-all duration-300 flex items-center justify-center gap-2 group/btn relative overflow-hidden ${
+        <a href="mailto:zorasolutions.official@gmail.com" className={`w-full py-3.5 rounded-xl text-sm font-bold text-center transition-all duration-300 flex items-center justify-center gap-2 group/btn relative overflow-hidden ${
           pkg.isPopular ? 'bg-primary text-white shadow-md hover:bg-primary/90' : 'bg-slate-50 text-slate-700 border border-slate-200 hover:bg-slate-100 hover:border-slate-300'
         }`}>
           <span className="relative z-10 flex items-center gap-2">Get Started <FiArrowRight size={14} className="group-hover/btn:translate-x-1 transition-transform" /></span>
@@ -204,7 +204,7 @@ function ServiceCard({ service, onFeedback }) {
             <button onClick={() => onFeedback(service)} className="w-9 h-9 rounded-xl flex items-center justify-center bg-amber-50 text-amber-500 hover:bg-amber-400 hover:text-white transition-all shadow-sm">
               <FiStar size={14} />
             </button>
-            <a href="mailto:info@raxwo.com" className="h-9 px-4 rounded-xl flex items-center justify-center bg-primary text-white text-xs font-bold hover:bg-primary/90 transition-all shadow-md">
+            <a href="mailto:zorasolutions.official@gmail.com" className="h-9 px-4 rounded-xl flex items-center justify-center bg-primary text-white text-xs font-bold hover:bg-primary/90 transition-all shadow-md">
               Enquire
             </a>
           </div>

@@ -7,18 +7,18 @@ export function buildCompanyFromSettings(settings = {}) {
   const email =
     settings.adminEmail?.trim() ||
     settings.contactEmail?.trim() ||
-    'raxwotechnology@gmail.com'
+    'zorasolutions.official@gmail.com'
   return {
-    name: settings.siteName?.trim() || 'Company',
+    name: settings.siteName?.trim() || 'Zora',
     tagline: settings.letterheadTagline?.trim() || settings.siteDescription?.trim() || '',
     logo,
     logoPath: settings.logoUrl?.trim() || '',
     address: settings.contactAddress?.trim() || '',
-    phone: settings.contactPhone?.trim() || '0743573333',
+    phone: settings.contactPhone?.trim() || '0777498608',
     email,
-    contactEmail: settings.contactEmail?.trim() || 'raxwotechnology@gmail.com',
-    adminEmail: settings.adminEmail?.trim() || settings.contactEmail?.trim() || 'raxwotechnology@gmail.com',
-    website: settings.websiteUrl?.trim() || 'www.raxwo.net',
+    contactEmail: settings.contactEmail?.trim() || 'zorasolutions.official@gmail.com',
+    adminEmail: settings.adminEmail?.trim() || settings.contactEmail?.trim() || 'zorasolutions.official@gmail.com',
+    website: settings.websiteUrl?.trim() || '',
     branchDetails: settings.branchDetails?.trim() || '',
     footer: settings.footerText?.trim() || '',
     seal: settings.sealUrl ? mediaUrl(settings.sealUrl) : '',

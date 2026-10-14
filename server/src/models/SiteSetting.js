@@ -1,12 +1,12 @@
 const mongoose = require('mongoose');
 
 const siteSettingSchema = new mongoose.Schema({
-  siteName: { type: String, default: 'Raxwo Pvt Ltd' },
+  siteName: { type: String, default: 'Zora' },
   siteDescription: { type: String, default: '' },
-  logoUrl: { type: String, default: '' },
+  logoUrl: { type: String, default: '/logo.png' },
   footerText: { type: String, default: '' },
-  contactEmail: { type: String, default: '' },
-  contactPhone: { type: String, default: '' },
+  contactEmail: { type: String, default: 'zorasolutions.official@gmail.com' },
+  contactPhone: { type: String, default: '0777498608' },
   contactAddress: { type: String, default: 'Weliweriya, Sri Lanka' },
   branchDetails: { type: String, default: '' },
   websiteUrl: { type: String, default: '' },
@@ -26,9 +26,9 @@ const siteSettingSchema = new mongoose.Schema({
   quotationLayoutContentMaxWidth: { type: String, default: '100%' },
   quotationLayoutShowDocumentFrame: { type: Boolean, default: true },
   quotationLayoutShowRefOnDocument: { type: Boolean, default: true },
-  whatsappNumber: { type: String, default: '' },
+  whatsappNumber: { type: String, default: '0777498608' },
   /** System admin email — notifications, letterheads, agreements */
-  adminEmail: { type: String, default: '' },
+  adminEmail: { type: String, default: 'zorasolutions.official@gmail.com' },
   sealUrl: { type: String, default: '' },
   letterheadUrl: { type: String, default: '' },
   signatures: {

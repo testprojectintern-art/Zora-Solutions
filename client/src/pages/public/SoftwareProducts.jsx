@@ -164,19 +164,19 @@ export default function SoftwareProducts() {
   return (
     <div className="bg-slate-50 text-slate-900 min-h-screen">
       <SEO
-        title="Software Products & SaaS ERP Solutions | Raxwo Technology"
-        description="Discover Raxwo's enterprise software products: Mobile Shop ERP, Gym Management, POS systems, Hotel & Restaurant ERP, and custom business platforms in Sri Lanka."
+        title="Software Products & SaaS ERP Solutions | Zora"
+        description="Discover Zora's enterprise software products: Mobile Shop ERP, Gym Management, POS systems, Hotel & Restaurant ERP, and custom business platforms in Sri Lanka."
         keywords="Software Products Sri Lanka, SaaS ERP, Mobile Shop Management Software, POS System Sri Lanka, Gym Management Software, Enterprise Software Platforms"
         schema={{
           '@context': 'https://schema.org',
           '@type': 'ItemList',
-          name: 'Raxwo Software Products & Enterprise Platforms',
+          name: 'Zora Software Products & Enterprise Platforms',
           itemListElement: baseProducts.map((p, idx) => ({
             '@type': 'ListItem',
             position: idx + 1,
             name: p.title,
             description: p.description || p.tagline,
-            url: `https://manage.raxwo.net/software-products/${p._id || p.id}`
+            url: `${window.location.origin}/software-products/${p._id || p.id}`
           }))
         }}
       />

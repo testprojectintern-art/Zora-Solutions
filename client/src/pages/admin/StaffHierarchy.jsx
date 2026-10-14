@@ -611,19 +611,19 @@ export default function StaffHierarchy() {
                   <div className="w-full h-full bg-white rounded-[14px] flex items-center justify-center p-1.5 overflow-hidden">
                     <img
                       src={logoSrc || '/logo.png'}
-                      alt={siteName || 'Raxwo'}
+                      alt={siteName || 'Zora'}
                       className="w-full h-full object-contain"
                       onError={(e) => {
                         if (!e.currentTarget.dataset.fallbackTried) {
                           e.currentTarget.dataset.fallbackTried = '1';
-                          e.currentTarget.src = '/raxwo-logo.png';
+                          e.currentTarget.src = '/logo.png';
                         } else {
                           e.currentTarget.style.display = 'none';
                           if (e.currentTarget.nextSibling) e.currentTarget.nextSibling.style.display = 'flex';
                         }
                       }}
                     />
-                    <div className="hidden w-full h-full items-center justify-center text-indigo-600 font-extrabold text-xl">R</div>
+                    <div className="hidden w-full h-full items-center justify-center text-indigo-600 font-extrabold text-xl">Z</div>
                   </div>
                 </div>
                 
@@ -631,7 +631,7 @@ export default function StaffHierarchy() {
                   <FiShield size={12} className="text-indigo-600" /> Corporate Apex · Organization Root
                 </span>
                 <h2 className="text-xl sm:text-2xl font-black text-slate-900 font-heading tracking-tight">
-                  Raxwo (Pvt) Ltd
+                  {siteName || 'Zora'}
                 </h2>
                 <p className="text-xs text-slate-500 font-medium mt-1 max-w-md">
                   Enterprise Cloud ERP & Multi-tenant Business Management Infrastructure

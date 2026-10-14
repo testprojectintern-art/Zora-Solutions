@@ -499,23 +499,18 @@ export default function Home() {
   return (
     <div className="overflow-x-hidden">
       <SEO
-        title="Raxwo Technology | Enterprise Software, Cloud & AI Solutions in Sri Lanka"
-        description="Raxwo Technology is a leading software engineering & digital transformation firm in Sri Lanka. We build custom enterprise applications, cloud infrastructure, SaaS ERP products, and modern AI platforms."
-        keywords="Raxwo, Raxwo Technology, Software Development Sri Lanka, Enterprise ERP Sri Lanka, Web Application Development Colombo, Mobile App Development, Cloud Architecture, IT Consulting, Software Company Sri Lanka"
+        title="Zora | Enterprise Software, Cloud & AI Solutions in Sri Lanka"
+        description="Zora is a leading software engineering & digital transformation firm in Sri Lanka. We build custom enterprise applications, cloud infrastructure, SaaS ERP products, and modern AI platforms."
+        keywords="Zora, Zora Solutions, Software Development Sri Lanka, Enterprise ERP Sri Lanka, Web Application Development Colombo, Mobile App Development, Cloud Architecture, IT Consulting, Software Company Sri Lanka"
         schema={{
           '@context': 'https://schema.org',
           '@type': 'Organization',
-          name: 'Raxwo Technology',
-          url: 'https://manage.raxwo.net/',
-          logo: 'https://manage.raxwo.net/raxwo-logo-final.png',
-          sameAs: [
-            'https://raxwo.net',
-            'https://www.linkedin.com/company/raxwotechnology',
-            'https://manage.raxwo.net'
-          ],
+          name: 'Zora',
+          logo: '/logo.png',
           contactPoint: {
             '@type': 'ContactPoint',
-            telephone: '+94 77 000 0000',
+            telephone: '+94 77 749 8608',
+            email: 'zorasolutions.official@gmail.com',
             contactType: 'customer service',
             areaServed: 'LK',
             availableLanguage: ['English', 'Sinhala']
@@ -799,7 +794,7 @@ export default function Home() {
           <div className="max-w-4xl mx-auto">
             <ContactForm
               title="Have an Idea or Specification? Let's Talk"
-              subtitle="Raxwo Pvt Ltd delivers custom software, web development, and ERP solutions tailored to help businesses grow locally and globally."
+              subtitle="Zora delivers custom software, web development, and ERP solutions tailored to help businesses grow locally and globally."
             />
           </div>
         </div>

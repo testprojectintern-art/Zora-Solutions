@@ -105,7 +105,7 @@ app.use((req, res, next) => {
 
 // Universal CORS middleware ensuring Access-Control headers on ALL responses (including errors & preflights)
 app.use((req, res, next) => {
-  const origin = req.headers.origin || 'https://manage.raxwo.net';
+  const origin = req.headers.origin || process.env.CLIENT_URL || 'http://localhost:5173';
   res.setHeader('Access-Control-Allow-Origin', origin);
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS');
@@ -249,7 +249,7 @@ ensureDefaultRules().catch(() => {});
 
 // Health check
 app.get('/api/health', (req, res) => {
-  res.json({ success: true, message: 'Raxwo API is running', timestamp: new Date().toISOString() });
+  res.json({ success: true, message: 'Zora API is running', timestamp: new Date().toISOString() });
 });
 
 // Dynamic SEO endpoints (Search engine indexing & sitemaps)
@@ -314,7 +314,7 @@ if (distDir) {
       <!DOCTYPE html>
       <html>
         <head>
-          <title>Raxwo API Server & Portal Status</title>
+          <title>Zora API Server & Portal Status</title>
           <meta name="viewport" content="width=device-width, initial-scale=1">
           <style>
             body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #0f172a; color: #f8fafc; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; padding: 20px; text-align: center; }
@@ -328,7 +328,7 @@ if (distDir) {
         </head>
         <body>
           <div class="card">
-            <h1>Raxwo Management System</h1>
+            <h1>Zora Management System</h1>
             <p>The backend API server is online. If you are accessing the management portal, please deploy the <code>client/dist</code> build folder into your hosting web root.</p>
             ${clientUrl ? `<a href="${clientUrl}" class="btn">Open Web App Portal &rarr;</a>` : ''}
             <br/>

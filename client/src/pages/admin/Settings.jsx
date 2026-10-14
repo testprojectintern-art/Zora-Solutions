@@ -229,7 +229,7 @@ export default function AdminSettings() {
               const url = window.URL.createObjectURL(new Blob([res.data]));
               const link = document.createElement('a');
               link.href = url;
-              link.setAttribute('download', 'raxwo_db_backup.json');
+              link.setAttribute('download', 'zora_db_backup.json');
               document.body.appendChild(link);
               link.click();
               link.remove();
@@ -464,7 +464,7 @@ export default function AdminSettings() {
         <h3 className="font-bold text-primary font-heading mb-4">System Information</h3>
         <div className="grid md:grid-cols-2 gap-3 text-sm">
           {[
-            { label:'Platform', value:'Raxwo Portal v1.0' },
+            { label:'Platform', value:'Zora Portal v1.0' },
             { label:'Stack', value:'MERN (MongoDB, Express, React, Node)' },
             { label:'Environment', value:'Development' },
             { label:'EPF Rate (Employee)', value: `${Number(siteData?.settings?.epfEmployeeRate ?? 8)}%` },

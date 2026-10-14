@@ -635,7 +635,8 @@ export default function PublicLayout() {
                 
                 <div>
                   <h4 className="font-heading font-bold text-[#20b2f5] text-[15px] mb-2">Contact:</h4>
-                  <p className="text-white text-[15px]">+94 74 357 3333</p>
+                  <p className="text-white text-[15px]">+94 77 749 8608</p>
+                  <p className="text-white text-[14px] mt-1"><a href="mailto:zorasolutions.official@gmail.com" className="hover:text-[#20b2f5] transition-colors">zorasolutions.official@gmail.com</a></p>
                 </div>
 
                 <div className="flex gap-3 pt-2">
@@ -726,7 +727,7 @@ export default function PublicLayout() {
           {/* Bottom Bar */}
           <div className="border-t-[1px] border-dotted border-white/20 mt-16 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
             <p className="text-white text-sm font-bold tracking-wide">
-              ©{new Date().getFullYear()} - Raxwo (Pvt) ltd. | All Rights Reserved
+              ©{new Date().getFullYear()} - Zora | All Rights Reserved
             </p>
             <div className="flex items-center gap-4 text-sm font-bold tracking-wide">
               <a href="https://raxwo.net/privacy-policy/" target="_blank" rel="noopener noreferrer" className="text-white hover:text-[#20b2f5] transition-colors">Privacy Policy</a>

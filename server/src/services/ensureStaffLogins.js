@@ -3,11 +3,11 @@ const Employee = require('../models/Employee');
 
 /** Demo staff logins — matches server/src/seed.js (not admin/client). */
 const STAFF_SPECS = [
-  { role: 'manager', name: 'Rashin Sheran', email: 'manager@raxwo.com', password: 'Manager@2026', department: 'Operations', designation: 'Operations Manager' },
-  { role: 'developer', name: 'John Developer', email: 'john@raxwo.com', password: 'Employee@2026', department: 'Engineering', designation: 'Senior Software Engineer' },
-  { role: 'developer', name: 'Nimal Silva', email: 'nimal@raxwo.com', password: 'Employee@2026', department: 'Engineering', designation: 'Junior Software Engineer' },
-  { role: 'designer', name: 'Alex Designer', email: 'designer@raxwo.com', password: 'Designer@2026', department: 'Design', designation: 'UI/UX Designer' },
-  { role: 'marketing', name: 'Maya Marketing', email: 'marketing@raxwo.com', password: 'Marketing@2026', department: 'Marketing', designation: 'Marketing Executive' },
+  { role: 'manager', name: 'Rashin Sheran', email: 'manager@zora.com', password: 'Manager@2026', department: 'Operations', designation: 'Operations Manager' },
+  { role: 'developer', name: 'John Developer', email: 'john@zora.com', password: 'Employee@2026', department: 'Engineering', designation: 'Senior Software Engineer' },
+  { role: 'developer', name: 'Nimal Silva', email: 'nimal@zora.com', password: 'Employee@2026', department: 'Engineering', designation: 'Junior Software Engineer' },
+  { role: 'designer', name: 'Alex Designer', email: 'designer@zora.com', password: 'Designer@2026', department: 'Design', designation: 'UI/UX Designer' },
+  { role: 'marketing', name: 'Maya Marketing', email: 'marketing@zora.com', password: 'Marketing@2026', department: 'Marketing', designation: 'Marketing Executive' },
 ];
 
 async function ensureEmployeeProfile(user, spec) {

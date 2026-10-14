@@ -68,7 +68,7 @@ export default function SocialAnalytics() {
   const dashboardRef = useRef(null);
   const qc = useQueryClient();
   const { user } = useAuthStore();
-  const isTopManager = user?.role === 'admin' || user?.email === 'manager@raxwo.com' || (user?.name || '').toLowerCase().includes('rashin');
+  const isTopManager = user?.role === 'admin' || user?.email === 'manager@zora.com' || user?.email === 'zorasolutions.official@gmail.com' || user?.email === 'manager@raxwo.com' || (user?.name || '').toLowerCase().includes('rashin');
 
   if (!isTopManager) {
     return (

@@ -26,19 +26,19 @@ export default function Careers() {
   return (
     <div>
       <SEO
-        title="Careers & Job Openings in Sri Lanka | Raxwo Technology"
-        description="Join Raxwo Technology's engineering and leadership team. Explore open software engineering, QA, DevOps, and design roles in Sri Lanka with competitive salaries and remote flexibility."
-        keywords="Careers Raxwo, Software Engineer Jobs Sri Lanka, IT Jobs Colombo, React Developer Vacancies, Remote Developer Jobs Sri Lanka"
+        title="Careers & Job Openings in Sri Lanka | Zora"
+        description="Join Zora's engineering and leadership team. Explore open software engineering, QA, DevOps, and design roles in Sri Lanka with competitive salaries and remote flexibility."
+        keywords="Careers Zora, Software Engineer Jobs Sri Lanka, IT Jobs Colombo, React Developer Vacancies, Remote Developer Jobs Sri Lanka"
         schema={{
           '@context': 'https://schema.org',
           '@type': 'ItemList',
-          name: 'Open Job Vacancies at Raxwo Technology',
+          name: 'Open Job Vacancies at Zora',
           itemListElement: jobs.map((j, idx) => ({
             '@type': 'ListItem',
             position: idx + 1,
             name: j.title,
             description: `${j.department} · ${j.type} · ${j.location}`,
-            url: `https://manage.raxwo.net/careers/${j._id}`
+            url: `${window.location.origin}/careers/${j._id}`
           }))
         }}
       />
@@ -76,11 +76,11 @@ export default function Careers() {
               transition={{ delay: 0.6 }}
               className="text-white/80 max-w-2xl mx-auto text-lg md:text-xl leading-relaxed font-normal"
             >
-              Build your career at Raxwo. Work on exciting projects with brilliant minds in a collaborative, growth-focused environment.
+              Build your career at Zora. Work on exciting projects with brilliant minds in a collaborative, growth-focused environment.
             </motion.p>
           </motion.div>
 
-          {/* Why Raxwo */}
+          {/* Why Zora */}
           <div className="grid md:grid-cols-3 gap-4">
             {[
               { icon: '🚀', title: 'Exciting Projects', desc: 'Work on cutting-edge systems for diverse industries' },

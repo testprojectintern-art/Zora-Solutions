@@ -28,24 +28,24 @@ export default function SEO({
   const { settings } = useSiteBranding()
 
   // Base fallback details
-  const siteName = settings?.siteName || 'Raxwo Technology'
+  const siteName = settings?.siteName || 'Zora'
   const defaultTitle = `${siteName} | Enterprise Software, Cloud & AI Solutions in Sri Lanka`
   const defaultDesc =
     settings?.siteDescription ||
-    'Raxwo Technology is a leading software engineering and digital transformation company in Sri Lanka. We build enterprise ERP systems, custom web & mobile apps, cloud infrastructure, and modern AI platforms.'
+    'Zora is a leading software engineering and digital transformation company in Sri Lanka. We build enterprise ERP systems, custom web & mobile apps, cloud infrastructure, and modern AI platforms.'
   const defaultKeywords =
-    'Raxwo, Raxwo Technology, Software Development Sri Lanka, Enterprise ERP Sri Lanka, Web Application Development Colombo, Mobile App Development Sri Lanka, Cloud Solutions, IT Consulting, Software Company Sri Lanka, custom software solutions'
+    'Zora, Software Development Sri Lanka, Enterprise ERP Sri Lanka, Web Application Development Colombo, Mobile App Development Sri Lanka, Cloud Solutions, IT Consulting, Software Company Sri Lanka, custom software solutions'
 
-  const finalTitle = title ? (title.includes('Raxwo') ? title : `${title} | ${siteName}`) : defaultTitle
+  const finalTitle = title ? (title.includes('Zora') ? title : `${title} | ${siteName}`) : defaultTitle
   const finalDesc = description || defaultDesc
   const finalKeywords = keywords || defaultKeywords
 
-  const siteOrigin = window.location.origin || 'https://manage.raxwo.net'
+  const siteOrigin = window.location.origin
   const currentPath = location.pathname + location.search
   const finalCanonical = canonicalUrl || `${siteOrigin}${currentPath}`
 
   // Image fallback
-  const logoFallback = settings?.logoUrl ? absoluteMediaUrl(settings.logoUrl) : `${siteOrigin}/raxwo-logo-final.png`
+  const logoFallback = settings?.logoUrl ? absoluteMediaUrl(settings.logoUrl) : `${siteOrigin}/logo.png`
   const finalImage = image ? (image.startsWith('http') ? image : `${siteOrigin}${image}`) : logoFallback
 
   useEffect(() => {

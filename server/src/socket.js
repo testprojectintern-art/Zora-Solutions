@@ -7,7 +7,7 @@ const userSocketMap = new Map();
 
 const ALLOWED_ORIGINS = [
   process.env.CLIENT_URL,
-  'https://manage.raxwo.net',
+  process.env.APP_URL,
   'http://localhost:5173',
   'http://localhost:5174',
   'http://localhost:3000',

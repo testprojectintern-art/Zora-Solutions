@@ -17,17 +17,17 @@ const seed = async () => {
   await Project.deleteMany({});
 
   // Create admin
-  const admin = await User.create({ name: 'Admin User', email: 'admin@raxwo.com', password: 'Admin@2026', role: 'admin', isActive: true });
+  const admin = await User.create({ name: 'Admin User', email: 'admin@zora.com', password: 'Admin@2026', role: 'admin', isActive: true });
 
   // Create manager
-  const manager = await User.create({ name: 'Rashin Sheran', email: 'manager@raxwo.com', password: 'Manager@2026', role: 'manager', isActive: true });
+  const manager = await User.create({ name: 'Rashin Sheran', email: 'manager@zora.com', password: 'Manager@2026', role: 'manager', isActive: true });
 
   // Create developers
-  const emp1User = await User.create({ name: 'John Developer', email: 'john@raxwo.com', password: 'Employee@2026', role: 'developer', isActive: true });
-  const emp2User = await User.create({ name: 'Nimal Silva', email: 'nimal@raxwo.com', password: 'Employee@2026', role: 'developer', isActive: true });
+  const emp1User = await User.create({ name: 'John Developer', email: 'john@zora.com', password: 'Employee@2026', role: 'developer', isActive: true });
+  const emp2User = await User.create({ name: 'Nimal Silva', email: 'nimal@zora.com', password: 'Employee@2026', role: 'developer', isActive: true });
 
-  const designerUser = await User.create({ name: 'Alex Designer', email: 'designer@raxwo.com', password: 'Designer@2026', role: 'designer', isActive: true });
-  const marketingUser = await User.create({ name: 'Maya Marketing', email: 'marketing@raxwo.com', password: 'Marketing@2026', role: 'marketing', isActive: true });
+  const designerUser = await User.create({ name: 'Alex Designer', email: 'designer@zora.com', password: 'Designer@2026', role: 'designer', isActive: true });
+  const marketingUser = await User.create({ name: 'Maya Marketing', email: 'marketing@zora.com', password: 'Marketing@2026', role: 'marketing', isActive: true });
 
   // Create employee profiles
   const emp1 = await Employee.create({
@@ -107,12 +107,12 @@ const seed = async () => {
   });
 
   console.log('✅ Seed completed!');
-  console.log('👤 Admin: admin@raxwo.com / Admin@2026');
-  console.log('👤 Manager: manager@raxwo.com / Manager@2026');
-  console.log('👤 Developer: john@raxwo.com / Employee@2026');
-  console.log('👤 Developer: nimal@raxwo.com / Employee@2026');
-  console.log('👤 Designer: designer@raxwo.com / Designer@2026');
-  console.log('👤 Marketing: marketing@raxwo.com / Marketing@2026');
+  console.log('👤 Admin: admin@zora.com / Admin@2026');
+  console.log('👤 Manager: manager@zora.com / Manager@2026');
+  console.log('👤 Developer: john@zora.com / Employee@2026');
+  console.log('👤 Developer: nimal@zora.com / Employee@2026');
+  console.log('👤 Designer: designer@zora.com / Designer@2026');
+  console.log('👤 Marketing: marketing@zora.com / Marketing@2026');
   console.log('👤 Client: client@techcorp.lk / Client@2026');
   process.exit(0);
 };

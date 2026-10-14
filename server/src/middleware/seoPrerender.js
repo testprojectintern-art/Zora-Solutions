@@ -36,60 +36,60 @@ const getBaseUrl = (req) => {
     return process.env.CLIENT_URL.replace(/\/$/, '');
   }
   const protocol = req.headers?.['x-forwarded-proto'] || req.protocol || 'https';
-  const host = req.headers?.['x-forwarded-host'] || (typeof req.get === 'function' ? req.get('host') : req.headers?.host) || 'manage.raxwo.net';
+  const host = req.headers?.['x-forwarded-host'] || (typeof req.get === 'function' ? req.get('host') : req.headers?.host) || 'zora.lk';
   return `${protocol}://${host}`;
 };
 
 const STATIC_METADATA = {
   '/': {
-    title: 'Raxwo | Enterprise Management System & ERP Platform – Raxwo Technology',
-    description: "Raxwo is Sri Lanka's leading Enterprise Management System (ERP) by Raxwo Technology. Manage employees, payroll, attendance, leaves, agreements, digital signatures, and corporate analytics — all in one powerful platform.",
+    title: 'Zora | Enterprise Management System & ERP Platform',
+    description: "Zora is Sri Lanka's leading Enterprise Management System (ERP). Manage employees, payroll, attendance, leaves, agreements, digital signatures, and corporate analytics — all in one powerful platform.",
     type: 'website',
   },
   '/about': {
-    title: 'About Us | Raxwo Technology – Enterprise Software & Digital Solutions',
-    description: 'Learn about Raxwo Technology: our story, vision, mission, and the world-class engineering team delivering enterprise ERP platforms, mobile apps, and custom software.',
+    title: 'About Us | Zora – Enterprise Software & Digital Solutions',
+    description: 'Learn about Zora: our story, vision, mission, and the world-class engineering team delivering enterprise ERP platforms, mobile apps, and custom software.',
     type: 'website',
   },
   '/services': {
-    title: 'Services & Solutions | Enterprise Software, Cloud & Mobile Apps – Raxwo',
-    description: 'Explore enterprise services by Raxwo Technology: Custom Software Engineering, ERP & CRM Systems, Mobile Apps, Cloud Infrastructure, and IT Consulting.',
+    title: 'Services & Solutions | Enterprise Software, Cloud & Mobile Apps – Zora',
+    description: 'Explore enterprise services by Zora: Custom Software Engineering, ERP & CRM Systems, Mobile Apps, Cloud Infrastructure, and IT Consulting.',
     type: 'website',
   },
   '/software-products': {
-    title: 'Software Products & Solutions | ERP, POS & Business Software – Raxwo',
-    description: 'Discover powerful, ready-to-deploy software products by Raxwo Technology — enterprise ERP, point-of-sale (POS), billing systems, and workflow automation platforms.',
+    title: 'Software Products & Solutions | ERP, POS & Business Software – Zora',
+    description: 'Discover powerful, ready-to-deploy software products by Zora — enterprise ERP, point-of-sale (POS), billing systems, and workflow automation platforms.',
     type: 'website',
   },
   '/portfolio': {
-    title: 'Portfolio & Case Studies | Successful Digital Deliveries – Raxwo',
-    description: 'Explore real-world case studies and digital transformation projects successfully engineered and delivered by Raxwo Technology across industries.',
+    title: 'Portfolio & Case Studies | Successful Digital Deliveries – Zora',
+    description: 'Explore real-world case studies and digital transformation projects successfully engineered and delivered by Zora across industries.',
     type: 'website',
   },
   '/careers': {
-    title: 'Careers at Raxwo | Join Our Engineering & Product Team',
-    description: 'Join Raxwo Technology. Explore current job openings in software engineering, UI/UX design, QA, project management, and business analytics in Sri Lanka.',
+    title: 'Careers at Zora | Join Our Engineering & Product Team',
+    description: 'Join Zora. Explore current job openings in software engineering, UI/UX design, QA, project management, and business analytics in Sri Lanka.',
     type: 'website',
   },
   '/team': {
-    title: 'Our Team & Leadership | The Engineers Behind Raxwo Technology',
-    description: 'Meet the talented engineers, designers, project managers, and leadership driving enterprise software innovation at Raxwo Technology.',
+    title: 'Our Team & Leadership | The Engineers Behind Zora',
+    description: 'Meet the talented engineers, designers, project managers, and leadership driving enterprise software innovation at Zora.',
     type: 'website',
   },
   '/contact': {
-    title: 'Contact Us | Speak with an Enterprise Solution Consultant – Raxwo',
-    description: 'Get in touch with Raxwo Technology. Request a project quotation, schedule a software demo, or discuss enterprise IT solutions with our team.',
+    title: 'Contact Us | Speak with an Enterprise Solution Consultant – Zora',
+    description: 'Get in touch with Zora. Request a project quotation, schedule a software demo, or discuss enterprise IT solutions with our team.',
     type: 'website',
   },
   '/login': {
-    title: 'Client & Staff Portal Login | Raxwo',
-    description: 'Sign in to your Raxwo account to manage projects, support tickets, and enterprise services.',
+    title: 'Client & Staff Portal Login | Zora',
+    description: 'Sign in to your Zora account to manage projects, support tickets, and enterprise services.',
     type: 'website',
     noindex: true,
   },
   '/register': {
-    title: 'Create a Client Account | Raxwo',
-    description: "Join Raxwo's enterprise platform to access client portal tools, project tracking, and dedicated support.",
+    title: 'Create a Client Account | Zora',
+    description: "Join Zora's enterprise platform to access client portal tools, project tracking, and dedicated support.",
     type: 'website',
     noindex: true,
   },
@@ -112,11 +112,11 @@ function createSeoPrerenderMiddleware(distDir) {
     const baseUrl = getBaseUrl(req);
     const cleanPath = req.path.replace(/\/$/, '') || '/';
     const canonicalUrl = `${baseUrl}${cleanPath === '/' ? '' : cleanPath}`;
-    const defaultImage = `${baseUrl}/raxwo-logo-final.png`;
+    const defaultImage = `${baseUrl}/logo.png`;
 
     let meta = STATIC_METADATA[cleanPath] || {
-      title: 'Raxwo | Enterprise Management System & ERP Platform – Raxwo Technology',
-      description: "Raxwo is Sri Lanka's leading Enterprise Management System (ERP) by Raxwo Technology. Manage employees, payroll, attendance, leaves, agreements, digital signatures, and corporate analytics — all in one powerful platform.",
+      title: 'Zora | Enterprise Management System & ERP Platform',
+      description: "Zora is Sri Lanka's leading Enterprise Management System (ERP). Manage employees, payroll, attendance, leaves, agreements, digital signatures, and corporate analytics — all in one powerful platform.",
       type: 'website',
     };
 
@@ -130,8 +130,8 @@ function createSeoPrerenderMiddleware(distDir) {
         const job = await Job.findById(careerMatch[1]).lean();
         if (job) {
           meta = {
-            title: `${job.title} – Career Opening | Raxwo Technology`,
-            description: `We are hiring a ${job.title} (${job.type || 'Full-time'}) in ${job.location || 'Colombo, Sri Lanka'}. Department: ${job.department}. Apply now on Raxwo Careers.`,
+            title: `${job.title} – Career Opening | Zora`,
+            description: `We are hiring a ${job.title} (${job.type || 'Full-time'}) in ${job.location || 'Colombo, Sri Lanka'}. Department: ${job.department}. Apply now on Zora Careers.`,
             type: 'article',
           };
           jsonLd = {
@@ -144,8 +144,8 @@ function createSeoPrerenderMiddleware(distDir) {
             employmentType: (job.type || 'FULL_TIME').toUpperCase().replace('-', '_'),
             hiringOrganization: {
               '@type': 'Organization',
-              name: 'Raxwo Technology',
-              sameAs: 'https://manage.raxwo.net',
+              name: 'Zora',
+              sameAs: baseUrl,
               logo: defaultImage,
             },
             jobLocation: {
@@ -171,8 +171,8 @@ function createSeoPrerenderMiddleware(distDir) {
         if (item) {
           const itemType = item.type === 'service' ? 'Service' : 'Software Product';
           meta = {
-            title: `${item.title} | Raxwo ${itemType}s`,
-            description: item.tagline || (item.description ? item.description.slice(0, 160) : `Learn more about ${item.title} by Raxwo Technology.`),
+            title: `${item.title} | Zora ${itemType}s`,
+            description: item.tagline || (item.description ? item.description.slice(0, 160) : `Learn more about ${item.title} by Zora.`),
             type: 'product',
           };
           if (item.imageUrl) {
@@ -186,7 +186,7 @@ function createSeoPrerenderMiddleware(distDir) {
             image: dynamicImage,
             brand: {
               '@type': 'Brand',
-              name: 'Raxwo Technology',
+              name: 'Zora',
             },
             offers: item.price ? {
               '@type': 'Offer',
@@ -275,7 +275,7 @@ function createSeoPrerenderMiddleware(distDir) {
 
     // Inject dynamic JSON-LD structured data if available
     if (jsonLd) {
-      const scriptTag = `\n    <script type="application/ld+json" id="raxwo-server-jsonld">\n${JSON.stringify(jsonLd, null, 2)}\n    </script>\n  </head>`;
+      const scriptTag = `\n    <script type="application/ld+json" id="zora-server-jsonld">\n${JSON.stringify(jsonLd, null, 2)}\n    </script>\n  </head>`;
       modifiedHtml = modifiedHtml.replace('</head>', scriptTag);
     }
 

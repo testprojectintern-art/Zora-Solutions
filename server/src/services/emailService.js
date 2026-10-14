@@ -1,6 +1,6 @@
 /**
  * emailService.js
- * Central email notification service for Raxwo ERP.
+ * Central email notification service for Zora ERP.
  * Supports professional, branded HTML templates pulled from SiteSettings.
  */
 const { sendMail } = require('../utils/mailer');
@@ -14,12 +14,12 @@ const buildEmailHTML = async (title, content) => {
   let settings = await SiteSetting.findOne().lean();
   if (!settings) settings = {};
 
-  const companyName = settings.siteName || 'Raxwo Technology';
+  const companyName = settings.siteName || 'Zora';
   const rawLogoUrl = (settings.logoUrl || '').trim();
 
   // Public base URL for external image links in emails.
   // Note: Emails MUST use absolute public HTTPS URLs. Base64 data URIs are blocked/dropped by Gmail, Apple Mail, and Outlook.
-  const publicBase = (process.env.PUBLIC_URL || (APP_URL && !APP_URL.includes('localhost') ? APP_URL : 'https://manage.raxwo.net')).replace(/\/$/, '');
+  const publicBase = (process.env.PUBLIC_URL || (APP_URL && !APP_URL.includes('localhost') ? APP_URL : '')).replace(/\/$/, '');
 
   let logoSrc = '';
   if (/^https?:\/\//i.test(rawLogoUrl)) {
@@ -28,12 +28,12 @@ const buildEmailHTML = async (title, content) => {
     const rel = rawLogoUrl.startsWith('/') ? rawLogoUrl : `/${rawLogoUrl}`;
     logoSrc = `${publicBase}${rel}`;
   } else {
-    // Standard white/transparent branding logo hosted on the portal
-    logoSrc = `${publicBase}/raxwo-logo-final.png`;
+    // Standard branding logo hosted on the portal
+    logoSrc = `${publicBase}/logo.png`;
   }
 
-  const contactEmail = settings.contactEmail || settings.adminEmail || 'contact@raxwo.net';
-  const contactPhone = settings.contactPhone || '';
+  const contactEmail = settings.contactEmail || settings.adminEmail || 'zorasolutions.official@gmail.com';
+  const contactPhone = settings.contactPhone || '0777498608';
   const address = settings.contactAddress || 'Colombo, Sri Lanka';
   const website = settings.websiteUrl ? (settings.websiteUrl.startsWith('http') ? settings.websiteUrl : `https://${settings.websiteUrl}`) : APP_URL;
 
@@ -99,7 +99,7 @@ const infoBoxHtml = (rows) => {
 const sendLoggedMail = async (options, moduleName = 'system') => {
   try {
     // Gmail requires from == authenticated SMTP_USER
-    options.from = process.env.SMTP_FROM || process.env.SMTP_USER || 'raxwotechnology@gmail.com';
+    options.from = process.env.SMTP_FROM || process.env.SMTP_USER || 'zorasolutions.official@gmail.com';
     console.log(`[Email] Sending "${options.subject}" to ${options.to} via ${options.from}`);
     const result = await sendMail(options);
     if (result && result.sent === false) {
@@ -134,7 +134,7 @@ const sendLoggedMail = async (options, moduleName = 'system') => {
 
 /* ─── Client / Auth Notifications ────────────────────────────────────────────── */
 exports.sendClientWelcomeEmail = async (user, password) => {
-  const html = await buildEmailHTML('Welcome to Raxwo', `
+  const html = await buildEmailHTML('Welcome to Zora', `
     <p>Hi <strong>${user.name}</strong>,</p>
     <p>We are thrilled to welcome you to our client portal. An account has been securely created for you.</p>
     ${infoBoxHtml([
@@ -144,7 +144,7 @@ exports.sendClientWelcomeEmail = async (user, password) => {
     <p>Please log in to your portal to view projects, track invoices, and manage your subscriptions. We recommend changing your password after your first login.</p>
     ${btnHtml('Access Portal', `${APP_URL}/login`)}
   `);
-  await sendLoggedMail({ to: user.email, subject: 'Welcome to Raxwo Technology', html }, 'auth');
+  await sendLoggedMail({ to: user.email, subject: 'Welcome to Zora', html }, 'auth');
 };
 
 /* ─── Project Notifications ──────────────────────────────────────────────────── */

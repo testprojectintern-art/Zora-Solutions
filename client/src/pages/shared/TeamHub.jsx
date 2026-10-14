@@ -128,7 +128,7 @@ export default function TeamHub({ isManagerView = false }) {
     queryFn: () => api.get('/employees?assignable=1').then(r => r.data),
   })
 
-  const isTopManager = user?.role === 'admin' || user?.email === 'manager@raxwo.com' || (user?.name || '').toLowerCase().includes('rashin')
+  const isTopManager = user?.role === 'admin' || user?.email === 'manager@zora.com' || user?.email === 'zorasolutions.official@gmail.com' || user?.email === 'manager@raxwo.com' || (user?.name || '').toLowerCase().includes('rashin')
 
   // Filter out any inactive/suspended/terminated members
   const allEmployees = useMemo(() => {

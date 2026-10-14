@@ -17,12 +17,12 @@ const values = [
 ]
 
 const milestones = [
-  { year: '2020', title: 'Founded in Colombo', desc: 'Raxwo was founded with a vision to bring world-class software development to Sri Lanka.' },
+  { year: '2020', title: 'Founded in Colombo', desc: 'Zora was founded with a vision to bring world-class software development to Sri Lanka.' },
   { year: '2021', title: 'First 10 Clients', desc: 'Delivered 10 successful projects across e-commerce, healthcare, and finance verticals.' },
   { year: '2022', title: 'Team of 20', desc: 'Expanded to 20 engineers and designers, opened our first dedicated office in Colombo 03.' },
   { year: '2023', title: 'ISO Certified & 50+ Projects', desc: 'Achieved ISO 9001 certification and surpassed 50 completed projects milestone.' },
   { year: '2024', title: 'International Expansion', desc: 'Serving clients in UAE, UK, and Australia. Team grew to 35+ professionals.' },
-  { year: '2026', title: 'Raxwo Portal Launch', desc: 'Launched our proprietary HRM platform to streamline internal operations.' },
+  { year: '2026', title: 'Zora Portal Launch', desc: 'Launched our proprietary HRM platform to streamline internal operations.' },
 ]
 
 const fadeUp = { 
@@ -46,18 +46,18 @@ export default function About() {
   return (
     <div className="overflow-x-hidden">
       <SEO
-        title="About Raxwo Technology | Our Story, Vision & Engineering Leadership"
-        description="Learn about Raxwo Technology, Sri Lanka's leading digital engineering firm. Discover our mission, values, milestones, and leadership delivering global software solutions."
-        keywords="About Raxwo, Raxwo Technology Story, Software Company Colombo, IT Leadership Sri Lanka, Enterprise Technology Partner"
+        title="About Zora | Our Story, Vision & Engineering Leadership"
+        description="Learn about Zora, Sri Lanka's leading digital engineering firm. Discover our mission, values, milestones, and leadership delivering global software solutions."
+        keywords="About Zora, Zora Story, Software Company Colombo, IT Leadership Sri Lanka, Enterprise Technology Partner"
         schema={{
           '@context': 'https://schema.org',
           '@type': 'AboutPage',
-          name: 'About Raxwo Technology',
-          description: 'Raxwo Technology is a leading software engineering and enterprise solutions firm in Sri Lanka.',
+          name: 'About Zora',
+          description: 'Zora is a leading software engineering and enterprise solutions firm in Sri Lanka.',
           publisher: {
             '@type': 'Organization',
-            name: 'Raxwo Technology',
-            url: 'https://manage.raxwo.net'
+            name: 'Zora',
+            url: window.location.origin
           }
         }}
       />
@@ -97,13 +97,13 @@ export default function About() {
                 Our Company
               </div>
               <h2 className="text-3xl lg:text-4xl font-bold text-[#0C0227] font-heading mb-2">
-                About Raxwo Pvt Ltd
+                About Zora
               </h2>
               <h3 className="text-2xl lg:text-3xl font-bold text-[#20b2f5] font-heading leading-tight mb-6">
                 Your Trusted Software Development & Digital Solutions Partner
               </h3>
               <p className="text-gray-600 leading-relaxed mb-6 text-sm lg:text-base">
-                At <strong className="text-[#0C0227]">Raxwo Pvt Ltd</strong>, we are a forward-thinking <strong className="text-[#0C0227]">software development company based in Sri Lanka</strong>, delivering <strong className="text-[#0C0227]">custom software, product development, web design</strong>, and <strong className="text-[#0C0227]">digital marketing solutions</strong> for businesses worldwide. Our mission is simple — to transform business challenges into scalable, digital-first solutions that generate real results.
+                At <strong className="text-[#0C0227]">Zora</strong>, we are a forward-thinking <strong className="text-[#0C0227]">software development company based in Sri Lanka</strong>, delivering <strong className="text-[#0C0227]">custom software, product development, web design</strong>, and <strong className="text-[#0C0227]">digital marketing solutions</strong> for businesses worldwide. Our mission is simple — to transform business challenges into scalable, digital-first solutions that generate real results.
               </p>
               <div className="flex gap-4 mt-8">
                 <Link to="/contact" className="btn-primary bg-[#20b2f5] hover:bg-blue-400">Start Your Project <FiArrowRight /></Link>

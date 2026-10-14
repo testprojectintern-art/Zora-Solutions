@@ -21,7 +21,7 @@ const QuickLink = ({ to, icon: Icon, label, color }) => (
 
 export default function AdminDashboard() {
   const { user } = useAuthStore()
-  const isTopManager = user?.role === 'admin' || user?.email === 'manager@raxwo.com' || (user?.name || '').toLowerCase().includes('rashin')
+  const isTopManager = user?.role === 'admin' || user?.email === 'manager@zora.com' || user?.email === 'zorasolutions.official@gmail.com' || user?.email === 'manager@raxwo.com' || (user?.name || '').toLowerCase().includes('rashin')
 
   const [branchFilter, setBranchFilter] = useState('')
   const { data: branchData } = useQuery({ queryKey: ['branches-list'], queryFn: () => api.get('/branches').then(r => r.data) })

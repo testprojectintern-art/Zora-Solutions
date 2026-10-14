@@ -155,8 +155,8 @@ export default function Services() {
   return (
     <div className="bg-slate-50 text-slate-900 min-h-screen">
       <SEO
-        title="Software Engineering & Custom IT Services | Raxwo Technology"
-        description="Explore Raxwo's engineering services: custom enterprise software, web development (React/Node.js), mobile apps (iOS/Android), cloud infrastructure, and IT consultancy."
+        title="Software Engineering & Custom IT Services | Zora"
+        description="Explore Zora's engineering services: custom enterprise software, web development (React/Node.js), mobile apps (iOS/Android), cloud infrastructure, and IT consultancy."
         keywords="Software Engineering Services, Custom Web Development, Mobile Apps Sri Lanka, Cloud Infrastructure AWS, Enterprise Software Development, IT Consulting Colombo"
         schema={{
           '@context': 'https://schema.org',
@@ -164,8 +164,8 @@ export default function Services() {
           serviceType: 'Software Development & IT Consultancy',
           provider: {
             '@type': 'Organization',
-            name: 'Raxwo Technology',
-            url: 'https://manage.raxwo.net'
+            name: 'Zora',
+            url: window.location.origin
           },
           areaServed: 'Sri Lanka & Global',
           hasOfferCatalog: {

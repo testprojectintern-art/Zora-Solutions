@@ -168,7 +168,7 @@ export default function DashboardLayout({ role }) {
   const [showSearchBox, setShowSearchBox] = useState(false)
   const searchBoxRef = useRef(null)
 
-  const isTopManager = user?.role === 'admin' || user?.email === 'manager@raxwo.com' || (user?.name || '').toLowerCase().includes('rashin')
+  const isTopManager = user?.role === 'admin' || user?.email === 'manager@zora.com' || user?.email === 'zorasolutions.official@gmail.com' || user?.email === 'manager@raxwo.com' || (user?.name || '').toLowerCase().includes('rashin')
 
   const { data: notifData } = useQuery({
     queryKey: ['notifications'],

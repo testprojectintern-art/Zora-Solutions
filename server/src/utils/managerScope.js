@@ -5,7 +5,7 @@ const { isTopManagerOrAdmin } = require('./userPermissions');
 
 /**
  * Resolves the subordinate scope for a Project Manager / Leader.
- * For Admin or Top Executives ("Rashin" / manager@raxwo.com), returns { isAll: true }.
+ * For Admin or Top Executives ("Rashin" / manager@zora.com), returns { isAll: true }.
  * For Project Managers:
  *  - Projects where projectManager === user._id (or where assigned)
  *  - Direct employee reports (Employee.manager === user._id)

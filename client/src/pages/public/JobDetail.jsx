@@ -29,9 +29,9 @@ export default function JobDetail() {
   return (
     <div>
       <SEO
-        title={`${job.title} (${job.department}) — Careers at Raxwo Technology`}
-        description={`Apply for ${job.title} position in ${job.department} at Raxwo Technology. Location: ${job.location}. Employment: ${job.type}. Apply online now.`}
-        keywords={`${job.title}, ${job.department} Jobs, IT Jobs Sri Lanka, Raxwo Careers, ${job.skills?.join(', ') || ''}`}
+        title={`${job.title} (${job.department}) — Careers at Zora`}
+        description={`Apply for ${job.title} position in ${job.department} at Zora. Location: ${job.location}. Employment: ${job.type}. Apply online now.`}
+        keywords={`${job.title}, ${job.department} Jobs, IT Jobs Sri Lanka, Zora Careers, ${job.skills?.join(', ') || ''}`}
         schema={{
           '@context': 'https://schema.org',
           '@type': 'JobPosting',
@@ -42,8 +42,8 @@ export default function JobDetail() {
           employmentType: job.type === 'full-time' ? 'FULL_TIME' : job.type === 'part-time' ? 'PART_TIME' : job.type === 'contract' ? 'CONTRACTOR' : 'INTERN',
           hiringOrganization: {
             '@type': 'Organization',
-            name: 'Raxwo Technology',
-            sameAs: 'https://manage.raxwo.net'
+            name: 'Zora',
+            sameAs: window.location.origin
           },
           jobLocation: {
             '@type': 'Place',

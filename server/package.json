@@ -1,7 +1,7 @@
 {
-  "name": "raxwo-server",
+  "name": "zora-server",
   "version": "1.0.0",
-  "description": "Raxwo Pvt Ltd - HRM & Corporate Portal Backend",
+  "description": "Zora - HRM & Corporate Portal Backend",
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",

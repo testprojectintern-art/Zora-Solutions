@@ -165,7 +165,7 @@ export default function ShowcaseDetailPage() {
   const handleGetQuote = () => {
     if (item?.contactActionType === 'whatsapp' && item?.whatsappNumber) {
       const phone = item.whatsappNumber.replace(/[^0-9]/g, '')
-      const msg = encodeURIComponent(`Hi Raxwo Team! I am interested in getting a quote for ${item.title}.`)
+      const msg = encodeURIComponent(`Hi Zora Team! I am interested in getting a quote for ${item.title}.`)
       window.open(`https://wa.me/${phone}?text=${msg}`, '_blank')
     } else {
       setShowQuoteModal(true)
@@ -208,18 +208,18 @@ export default function ShowcaseDetailPage() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50/20 text-slate-900 pt-20 pb-24">
       <SEO
         title={`${item.title} — Features, Pricing & Live Demo`}
-        description={item.tagline || cleanDescription || `Explore ${item.title} by Raxwo Technology. Real-time operations, demo access, and enterprise features.`}
-        keywords={`${item.title}, ${item.category || 'ERP'}, Raxwo Technology, Software Sri Lanka, ${item.badge || ''}`}
+        description={item.tagline || cleanDescription || `Explore ${item.title} by Zora. Real-time operations, demo access, and enterprise features.`}
+        keywords={`${item.title}, ${item.category || 'ERP'}, Zora, Software Sri Lanka, ${item.badge || ''}`}
         image={item.imageUrl ? mediaUrl(item.imageUrl) : undefined}
         schema={{
           '@context': 'https://schema.org',
           '@type': 'Product',
           name: item.title,
           description: item.tagline || cleanDescription,
-          image: item.imageUrl ? mediaUrl(item.imageUrl) : 'https://manage.raxwo.net/raxwo-logo-final.png',
+          image: item.imageUrl ? mediaUrl(item.imageUrl) : '/logo.png',
           brand: {
             '@type': 'Brand',
-            name: 'Raxwo Technology'
+            name: 'Zora'
           },
           offers: {
             '@type': 'Offer',

@@ -40,7 +40,7 @@ const EMPTY_FORM = {
 
 export default function AdminAttendance() {
   const { user } = useAuthStore()
-  const canMarkAttendance = user?.role === 'admin' || user?.email === 'manager@raxwo.com' || (user?.name || '').toLowerCase().includes('rashin')
+  const canMarkAttendance = user?.role === 'admin' || user?.email === 'manager@zora.com' || user?.email === 'zorasolutions.official@gmail.com' || user?.email === 'manager@raxwo.com' || (user?.name || '').toLowerCase().includes('rashin')
   const qc = useQueryClient()
   const now = new Date()
   const todayStr = now.toISOString().split('T')[0]

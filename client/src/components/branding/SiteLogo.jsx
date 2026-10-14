@@ -13,11 +13,11 @@ export default function SiteLogo({
   imgClassName = '',
   asLink = true,
 }) {
-  const { siteName, siteTagline } = useSiteBranding()
+  const { siteName, siteTagline, logoSrc: brandedLogo } = useSiteBranding()
   const isDark = variant === 'dark'
   
-  // Use the new URL for both variants
-  const logoSrc = 'https://raxwo.net/wp-content/uploads/2025/07/1-1-e1753477709460.png'
+  // Use branded logo from settings or /logo.png (zora bg.png)
+  const logoSrc = brandedLogo || '/logo.png'
 
   const [logoBroken, setLogoBroken] = useState(false)
 
@@ -42,7 +42,7 @@ export default function SiteLogo({
           // Home page and Footer logo (plain image)
           <img
             src={logoSrc}
-            alt={siteName || "Raxwo"}
+            alt={siteName || "Zora"}
             onError={() => setLogoBroken(true)}
             className={`object-contain flex-shrink-0 h-10 md:h-14 w-auto max-w-[200px] ${imgClassName}`}
           />
@@ -61,7 +61,7 @@ export default function SiteLogo({
                 
                 <img
                   src={logoSrc}
-                  alt={siteName || "Raxwo"}
+                  alt={siteName || "Zora"}
                   onError={() => setLogoBroken(true)}
                   className={`object-contain h-7 md:h-10 w-auto max-w-[160px] drop-shadow-md relative z-10 group-hover:drop-shadow-[0_0_8px_rgba(32,178,245,0.4)] transition-all duration-300 ${imgClassName}`}
                 />
@@ -72,14 +72,10 @@ export default function SiteLogo({
       ) : (
         <div className={`flex flex-col ${isDark ? 'items-start' : 'items-start'} justify-center`}>
           <div className={`flex items-center font-bold font-heading ${isDark ? 'text-[36px]' : 'text-[32px]'} leading-none tracking-widest`}>
-            <span className={nameCls}>RAXW</span>
-            <div className="relative flex items-center justify-center">
-              <span className={nameCls}>O</span>
-              <div className="absolute w-[8px] h-[8px] rounded-full bg-[#20b2f5] left-0 translate-x-0.5" />
-            </div>
+            <span className={nameCls}>ZORA</span>
           </div>
           <span className="text-[#20b2f5] text-[10px] font-bold tracking-[0.4em] mt-1.5 ml-1 leading-none uppercase">
-            Next Level Tech
+            {siteTagline || 'Enterprise Platform'}
           </span>
         </div>
       )}

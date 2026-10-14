@@ -8,7 +8,7 @@ function isTopManagerOrAdmin(user) {
   if (!user) return false;
   const topRoles = ['admin', 'owner', 'superadmin', 'director'];
   if (topRoles.includes(user.role)) return true;
-  if (user.email && user.email.toLowerCase() === 'manager@raxwo.com') return true;
+  if (user.email && (user.email.toLowerCase() === 'manager@zora.com' || user.email.toLowerCase() === 'zorasolutions.official@gmail.com')) return true;
   if (user.name && user.name.toLowerCase().includes('rashin')) return true;
   return false;
 }

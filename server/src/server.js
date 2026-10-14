@@ -33,7 +33,7 @@ connectDB();
 const server = http.createServer(app);
 initSocket(server);
 server.listen(PORT, () => {
-  console.log(`🚀 Raxwo Server running on http://localhost:${PORT}`);
+  console.log(`🚀 Zora Server running on http://localhost:${PORT}`);
   console.log(`📊 Environment: ${process.env.NODE_ENV}`);
 });
 

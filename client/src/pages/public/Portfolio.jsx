@@ -60,18 +60,18 @@ export default function Portfolio() {
   return (
     <div>
       <SEO
-        title="Client Portfolio & Case Studies | Raxwo Technology"
-        description="Explore enterprise software projects, web apps, and digital systems successfully delivered by Raxwo Technology across industries in Sri Lanka and worldwide."
-        keywords="Raxwo Portfolio, Software Projects Sri Lanka, Web Application Case Studies, ERP Implementations, Enterprise Software Work"
+        title="Client Portfolio & Case Studies | Zora"
+        description="Explore enterprise software projects, web apps, and digital systems successfully delivered by Zora across industries in Sri Lanka and worldwide."
+        keywords="Zora Portfolio, Software Projects Sri Lanka, Web Application Case Studies, ERP Implementations, Enterprise Software Work"
         schema={{
           '@context': 'https://schema.org',
           '@type': 'CollectionPage',
-          name: 'Raxwo Technology Portfolio & Case Studies',
-          description: 'Showcase of digital transformation and enterprise software solutions delivered by Raxwo Technology.',
+          name: 'Zora Portfolio & Case Studies',
+          description: 'Showcase of digital transformation and enterprise software solutions delivered by Zora.',
           publisher: {
             '@type': 'Organization',
-            name: 'Raxwo Technology',
-            url: 'https://manage.raxwo.net'
+            name: 'Zora',
+            url: window.location.origin
           }
         }}
       />

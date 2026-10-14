@@ -16,19 +16,19 @@ export default function Contact() {
   return (
     <div>
       <SEO
-        title="Contact Us & Get a Free Quote | Raxwo Technology"
-        description="Ready to scale your business with custom software? Contact Raxwo Technology for software development, ERP consulting, and cloud services in Sri Lanka."
-        keywords="Contact Raxwo, Software Development Quote, Hire Developers Sri Lanka, IT Consultation Colombo"
+        title="Contact Us & Get a Free Quote | Zora"
+        description="Ready to scale your business with custom software? Contact Zora for software development, ERP consulting, and cloud services in Sri Lanka."
+        keywords="Contact Zora, Software Development Quote, Hire Developers Sri Lanka, IT Consultation Colombo"
         schema={{
           '@context': 'https://schema.org',
           '@type': 'ContactPage',
-          name: 'Contact Raxwo Technology',
-          description: 'Get in touch with Raxwo Technology for enterprise software engineering, consultations, and digital solutions.',
+          name: 'Contact Zora',
+          description: 'Get in touch with Zora for enterprise software engineering, consultations, and digital solutions.',
           mainEntity: {
             '@type': 'LocalBusiness',
-            name: 'Raxwo Technology',
-            telephone: settings?.contactPhone || '+94 77 000 0000',
-            email: settings?.contactEmail || 'contact@raxwo.net',
+            name: 'Zora',
+            telephone: settings?.contactPhone || '+94 77 749 8608',
+            email: settings?.contactEmail || 'zorasolutions.official@gmail.com',
             address: {
               '@type': 'PostalAddress',
               streetAddress: settings?.contactAddress || 'Weliweriya',
@@ -87,9 +87,9 @@ export default function Contact() {
               </div>
               {/* Info Items */}
               {[
-                { icon: FiMapPin, label: 'Company', value: settings.siteName || 'Raxwo Technology (Pvt) Ltd' },
-                { icon: FiPhone, label: 'Phone', value: settings.contactPhone || '+94 11 234 5678' },
-                { icon: FiMail, label: 'Email', value: settings.contactEmail || 'hello@raxwo.com' },
+                { icon: FiMapPin, label: 'Company', value: settings.siteName || 'Zora' },
+                { icon: FiPhone, label: 'Phone', value: settings.contactPhone || '+94 77 749 8608' },
+                { icon: FiMail, label: 'Email', value: settings.contactEmail || 'zorasolutions.official@gmail.com' },
               ].map((info, i) => (
                 <motion.div 
                   key={info.label} 

@@ -83,7 +83,7 @@ function MemberCard({ emp, level, index, onClick }) {
   const photo = emp.profilePhoto || emp.userId?.avatar
   const name = emp.userId?.name || 'Team Member'
   const desig = emp.designation || 'Specialist'
-  const dept = emp.department || 'Raxwo Technology'
+  const dept = emp.department || 'Zora'
   const isIntern = emp.employmentType === 'intern'
   const Icon = t.icon
 
@@ -242,7 +242,7 @@ function MemberModal({ member, onClose }) {
                   {member.designation || 'Staff Member'}
                 </p>
                 <p className="text-[11px] text-white/70 mt-0.5 truncate">
-                  {member.department || 'Raxwo Technology'}
+                  {member.department || 'Zora'}
                 </p>
               </div>
             </div>
@@ -251,7 +251,7 @@ function MemberModal({ member, onClose }) {
           {/* Details Body */}
           <div className="p-6 space-y-3 text-sm">
             {[
-              { label: 'Department', value: member.department || 'Raxwo Team' },
+              { label: 'Department', value: member.department || 'Zora Team' },
               { label: 'Employment Type', value: member.employmentType?.replace(/_/g, ' ') || 'Full-time' },
               { label: 'Role Level', value: t.badge },
               { label: 'Status', value: 'Active Member', green: true },
@@ -351,9 +351,9 @@ export default function OurTeam() {
   return (
     <div className="overflow-x-hidden bg-[#fafbfc] min-h-screen">
       <SEO
-        title="Meet Our Engineering & Leadership Team | Raxwo Technology"
-        description="Meet the passionate software engineers, designers, project managers, and directors driving digital innovation at Raxwo Technology in Sri Lanka."
-        keywords="Raxwo Team, Software Engineers Sri Lanka, Tech Leadership Colombo, Developers Raxwo, IT Specialists"
+        title="Meet Our Engineering & Leadership Team | Zora"
+        description="Meet the passionate software engineers, designers, project managers, and directors driving digital innovation at Zora in Sri Lanka."
+        keywords="Zora Team, Software Engineers Sri Lanka, Tech Leadership Colombo, Developers Zora, IT Specialists"
       />
       {/* ── HERO SECTION (Matching Site UI Theme) ── */}
       <section className="relative bg-[#0C0227] pt-32 pb-24 overflow-hidden">
@@ -380,7 +380,7 @@ export default function OurTeam() {
               Meet Our <span className="text-[#20b2f5]">Team</span>
             </h1>
             <p className="text-white/80 max-w-2xl mx-auto text-base md:text-lg leading-relaxed font-normal mb-6">
-              The passionate innovators, architects, and specialists driving digital transformation at Raxwo Technology.
+              The passionate innovators, architects, and specialists driving digital transformation at Zora.
             </p>
             <div className="flex items-center justify-center gap-2 text-white/80 text-sm font-medium">
               <Link to="/" className="flex items-center gap-1 hover:text-[#20b2f5] transition-colors">
@@ -581,7 +581,7 @@ export default function OurTeam() {
                 Driven by Passion & Innovation
               </h2>
               <p className="text-slate-600 text-sm md:text-base mt-2">
-                At Raxwo Technology, we foster a collaborative, growth-focused culture built on engineering excellence and client trust.
+                At Zora, we foster a collaborative, growth-focused culture built on engineering excellence and client trust.
               </p>
             </div>
 
@@ -626,7 +626,7 @@ export default function OurTeam() {
                   Want to build the future with us?
                 </h3>
                 <p className="text-white/75 text-sm md:text-base max-w-xl">
-                  Explore open positions, internship opportunities, and engineering roles at Raxwo Technology.
+                  Explore open positions, internship opportunities, and engineering roles at Zora.
                 </p>
               </div>
               <div className="flex flex-wrap gap-4">

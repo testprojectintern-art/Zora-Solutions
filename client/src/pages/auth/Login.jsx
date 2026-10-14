@@ -45,7 +45,7 @@ export default function Login() {
     <div className="min-h-screen bg-gradient-hero flex">
       <SEO 
         title="Client & Staff Portal Login"
-        description="Sign in to your Raxwo account to manage projects, support tickets, and enterprise services."
+        description="Sign in to your Zora account to manage projects, support tickets, and enterprise services."
         noindex={true}
       />
       {/* Left panel */}
@@ -81,7 +81,7 @@ export default function Login() {
           </div>
         </div>
 
-        <p className="text-white/30 text-sm">© {new Date().getFullYear()} Raxwo — Colombo, Sri Lanka</p>
+        <p className="text-white/30 text-sm">© {new Date().getFullYear()} Zora — Sri Lanka</p>
       </div>
 
       {/* Right panel - form */}
@@ -114,7 +114,7 @@ export default function Login() {
                 <input
                   {...register('email', { required: 'Email is required' })}
                   type="email"
-                  placeholder="management@raxwo.net"
+                  placeholder="management@zora.com"
                   className="w-full pl-10 pr-4 py-3 bg-[#EEF2FC] border-none rounded-xl text-sm text-slate-800 placeholder:text-slate-400 focus:bg-[#E5EAFC] focus:outline-none focus:ring-2 focus:ring-primary/20 transition-all"
                 />
               </div>
