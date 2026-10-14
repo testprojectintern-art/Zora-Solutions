@@ -191,6 +191,23 @@ app.get('/api/debug/uploads', (req, res) => {
 });
 
 
+// Ensure MongoDB connection is ready before handling API requests (vital for Vercel/serverless)
+app.use(async (req, res, next) => {
+  if (req.path.startsWith('/api') && req.path !== '/api/health') {
+    try {
+      const connectDB = require('./config/db');
+      await connectDB();
+    } catch (err) {
+      console.error('❌ Database connection failed for request:', err.message);
+      return res.status(500).json({
+        success: false,
+        message: 'Database connection error: ' + err.message,
+      });
+    }
+  }
+  next();
+});
+
 // API Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/employees', employeeRoutes);
