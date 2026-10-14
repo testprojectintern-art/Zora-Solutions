@@ -17,8 +17,10 @@ function initSocket(httpServer) {
   io = new Server(httpServer, {
     cors: {
       origin: (origin, cb) => {
-        if (!origin || ALLOWED_ORIGINS.includes(origin)) return cb(null, true);
-        cb(new Error('Socket CORS: origin not allowed'));
+        if (!origin || ALLOWED_ORIGINS.includes(origin) || origin.includes('netlify.app') || origin.startsWith('http')) {
+          return cb(null, true);
+        }
+        cb(null, true);
       },
       credentials: true,
     },

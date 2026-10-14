@@ -1,3 +1,7 @@
-# SPA fallback (Netlify, Cloudflare Pages, some static hosts)
-# Serve index.html for client routes so refresh on /admin works.
-/*    /index.html   200
+# Proxy API and uploads requests to Render backend
+/api/*      https://zora-solutions.onrender.com/api/:splat      200
+/uploads/*  https://zora-solutions.onrender.com/uploads/:splat  200
+
+# SPA fallback (Netlify, Cloudflare Pages)
+# Serve index.html for client routes so page refreshes never return 404
+/*          /index.html                                         200
