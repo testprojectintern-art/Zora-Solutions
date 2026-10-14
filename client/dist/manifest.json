@@ -1,7 +1,7 @@
-﻿{
-  "name": "Raxwo Management System",
-  "short_name": "Raxwo",
-  "description": "Sri Lanka's leading Enterprise Management System and ERP platform by Raxwo Technology. Manage employees, payroll, attendance, leaves, digital signatures, and analytics.",
+{
+  "name": "Zora Management System",
+  "short_name": "Zora",
+  "description": "Sri Lanka's leading Enterprise Management System and ERP platform by Zora. Manage employees, payroll, attendance, leaves, digital signatures, and analytics.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
@@ -27,10 +27,10 @@
   ],
   "screenshots": [
     {
-      "src": "/raxwo-logo-final.png",
+      "src": "/logo.png",
       "sizes": "512x512",
       "type": "image/png",
-      "label": "Raxwo Management System Dashboard"
+      "label": "Zora Management System Dashboard"
     }
   ],
   "related_applications": [],

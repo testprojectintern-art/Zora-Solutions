@@ -1,5 +1,5 @@
-# robots.txt — Raxwo Management System (manage.raxwo.net)
-# © Raxwo Technology — https://manage.raxwo.net
+# robots.txt — Zora Management System
+# © Zora — All Rights Reserved
 
 User-agent: *
 Allow: /
@@ -48,5 +48,5 @@ Disallow: /
 User-agent: DotBot
 Disallow: /
 
-# Dynamic Sitemap
-Sitemap: https://manage.raxwo.net/sitemap.xml
+# Sitemap
+Sitemap: /sitemap.xml

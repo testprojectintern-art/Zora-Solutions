@@ -14,12 +14,12 @@
     font-weight: 400;
     line-height: 1.65;
     letter-spacing: -0.01em;
-    background-image: radial-gradient(circle at top right, rgba(12, 2, 39, 0.08), transparent 38%);
+    background-image: radial-gradient(circle at top right, rgba(1, 38, 100, 0.08), transparent 38%);
   }
   
   h1, h2, h3, h4, h5, h6 { 
     font-family: 'Poppins', sans-serif !important;
-    color: #0C0227;
+    color: #021638;
     line-height: 1.25;
     letter-spacing: -0.02em;
   }
@@ -42,13 +42,16 @@
   }
 }
 
-/* ── Force #0C0227 background-color on hero/gradient sections ─────── */
+/* ── Zora Logo Blue on hero/gradient sections ─────── */
 @layer utilities {
-  .bg-gradient-hero,
-  .bg-gradient-navy,
+  .bg-gradient-hero {
+    background: linear-gradient(140deg, #02122c 0%, #012664 50%, #031b42 100%) !important;
+  }
+  .bg-gradient-navy {
+    background: linear-gradient(135deg, #02122c 0%, #012664 50%, #021638 100%) !important;
+  }
   .bg-gradient-blue {
-    background-color: #0C0227 !important;
-    background-image: none !important;
+    background: linear-gradient(135deg, #02122c 0%, #012664 50%, #031b42 100%) !important;
   }
 }
 
