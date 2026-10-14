@@ -30,11 +30,8 @@ const ensureAdminUser = require('./services/ensureAdminUser');
 
 const PORT = process.env.PORT || 5000;
 
-// Start HTTP server immediately; DB connects with retries.
-connectDB().then(() => ensureAdminUser()).catch(() => {});
-const server = http.createServer(app);
-initSocket(server);
 if (!process.env.VERCEL) {
+  connectDB().then(() => ensureAdminUser()).catch(() => {});
   server.listen(PORT, '0.0.0.0', () => {
     console.log(`🚀 Zora Server running on http://0.0.0.0:${PORT}`);
     console.log(`📊 Environment: ${process.env.NODE_ENV}`);

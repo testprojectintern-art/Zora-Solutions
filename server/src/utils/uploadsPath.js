@@ -1,8 +1,11 @@
 const path = require('path');
 const fs = require('fs');
 
-/** Stable uploads root (Hostinger cwd may differ from the server package). */
+/** Stable uploads root (uses /tmp on Vercel / serverless to prevent EROFS crashes). */
 function getUploadsRoot() {
+  if (process.env.VERCEL) {
+    return path.join('/tmp', 'uploads');
+  }
   if (process.env.UPLOADS_DIR) {
     return path.resolve(process.env.UPLOADS_DIR);
   }
@@ -11,9 +14,14 @@ function getUploadsRoot() {
 
 function ensureUploadSubdirs(subs = ['documents', 'images', 'cvs', 'agreements', 'bills', 'worklogs', 'requests']) {
   const root = getUploadsRoot();
-  subs.forEach((sub) => {
-    fs.mkdirSync(path.join(root, sub), { recursive: true });
-  });
+  try {
+    subs.forEach((sub) => {
+      fs.mkdirSync(path.join(root, sub), { recursive: true });
+    });
+  } catch (err) {
+    // Non-fatal on read-only environments
+    console.warn('⚠️ Could not create upload directory:', err.message);
+  }
   return root;
 }
 
