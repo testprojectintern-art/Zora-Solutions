@@ -101,7 +101,6 @@ export default function InvoicePrintBody({
             dangerouslySetInnerHTML={{
               __html: buildDocumentLetterheadHtml(siteSettings, {
                 forPrint,
-                showTagline: siteSettings.letterheadTagline || 'Next Level Tech',
               }),
             }}
           />

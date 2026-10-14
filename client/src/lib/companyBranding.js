@@ -73,25 +73,24 @@ function escapeHtml(s) {
 }
 
 /** Logo img HTML — use forPrint=true in print/PDF */
-export function companyLogoHtml(company, { forPrint = false, maxHeight = 56 } = {}) {
+export function companyLogoHtml(company, { forPrint = false, maxHeight = 72 } = {}) {
   const raw = company.logoPath || company.logo || '/logo.png'
   const src = forPrint ? absoluteMediaUrl(raw) : company.logo || mediaUrl(raw) || '/logo.png'
-  return `<img src="${(src || '/logo.png').replace(/"/g, '')}" alt="Logo" style="max-height:${maxHeight}px;max-width:200px;object-fit:contain;display:block"/>`
+  const safeSrc = (src || '/logo.png').replace(/"/g, '')
+  return `<img src="${safeSrc}" alt="${escapeHtml(company.name || 'Zora')}" style="max-height:${maxHeight}px;max-width:260px;width:auto;height:auto;object-fit:contain;display:block;" onerror="this.onerror=null;this.src='/logo.png';"/>`
 }
 
 /** HTML letterhead block for print/PDF */
 export function letterheadHtml(company, { forPrint = false } = {}) {
-  const logo = companyLogoHtml(company, { forPrint })
+  const logo = companyLogoHtml(company, { forPrint, maxHeight: 72 })
   const sealSrc = forPrint ? absoluteMediaUrl(company.seal) : company.seal
   const seal = sealSrc
     ? `<img src="${sealSrc.replace(/"/g, '')}" alt="Seal" style="max-height:64px;margin-left:12px"/>`
     : ''
   return `
-    <header style="display:flex;align-items:flex-start;justify-content:space-between;gap:20px;padding-bottom:16px;border-bottom:3px solid #1e3a8a;margin-bottom:20px">
+    <header style="display:flex;align-items:center;justify-content:space-between;gap:20px;padding-bottom:16px;border-bottom:3px solid #1e3a8a;margin-bottom:20px">
       <div style="flex-shrink:0">${logo}</div>
       <div style="text-align:right;flex:1;min-width:180px">
-        <h1 style="margin:0;font-size:18px;font-weight:800;color:#0f172a">${escapeHtml(company.name)}</h1>
-        ${company.tagline ? `<p style="margin:4px 0 0;font-size:10pt;color:#64748b;font-style:italic">${escapeHtml(company.tagline)}</p>` : ''}
         ${contactBlockHtml(company)}
       </div>
       ${seal}

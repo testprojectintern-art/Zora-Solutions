@@ -82,12 +82,11 @@ function localFileToDataUri(uploadPath) {
 
 function buildLetterhead(settings) {
   const name = settings.siteName || 'Zora Solutions';
-  const tagline = settings.letterheadTagline || settings.siteDescription || 'Next Level Tech';
   let logo = settings.logoUrl ? localFileToDataUri(settings.logoUrl) : '';
   if (!logo) logo = localFileToDataUri('logo.png');
   const logoHtml = logo
-    ? `<img src="${logo.replace(/"/g, '')}" alt="Logo" style="max-height:56px;max-width:200px;object-fit:contain;display:block"/>`
-    : `<span style="font-weight:900;font-size:24px;color:#032d60">${esc(name)}</span>`;
+    ? `<img src="${logo.replace(/"/g, '')}" alt="Logo" style="max-height:72px;max-width:260px;width:auto;height:auto;object-fit:contain;display:block"/>`
+    : `<span style="font-weight:900;font-size:26px;color:#032d60">${esc(name)}</span>`;
 
   const lines = [];
   if (settings.contactAddress) lines.push({ label: 'Address', text: settings.contactAddress });
@@ -110,15 +109,11 @@ function buildLetterhead(settings) {
   ` : '';
 
   return `
-    <header style="display:flex;align-items:flex-start;justify-content:space-between;padding-bottom:18px;border-bottom:3px solid #0284c7;margin-bottom:24px">
-      <div style="display:flex;align-items:center;gap:16px;">
-        <div style="flex-shrink:0">${logoHtml}</div>
-        <div>
-          <h1 style="margin:0;font-size:24px;font-weight:900;color:#0f172a;letter-spacing:-0.02em;line-height:1.2;word-break:break-word">${esc(name)}</h1>
-          ${tagline ? `<p style="margin:4px 0 0;font-size:11pt;font-weight:600;color:#0284c7">${esc(tagline)}</p>` : ''}
-        </div>
+    <header style="display:flex;align-items:center;justify-content:space-between;padding-bottom:18px;border-bottom:3px solid #0284c7;margin-bottom:24px">
+      <div style="flex-shrink:0">
+        ${logoHtml}
       </div>
-      <div style="text-align:right;flex-shrink:0;padding-top:4px;">${contactHtml}</div>
+      <div style="text-align:right;flex-shrink:0;">${contactHtml}</div>
     </header>`;
 }
 

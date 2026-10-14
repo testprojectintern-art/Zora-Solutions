@@ -13,27 +13,18 @@ function esc(s) {
     .replace(/"/g, '&quot;')
 }
 
-/** Letterhead: logo + name + tagline left; contact right */
-export function buildDocumentLetterheadHtml(settings, { forPrint = true, showTagline } = {}) {
+/** Letterhead: prominent logo left; contact details right */
+export function buildDocumentLetterheadHtml(settings, { forPrint = true } = {}) {
   const company = buildCompanyFromSettings(settings)
   
-  const tagline =
-    showTagline !== undefined
-      ? showTagline
-      : settings.letterheadTagline?.trim() || settings.siteDescription?.trim() || 'Next Level Tech'
-  
   // Use absolute URLs for logo to ensure cross-origin compatibility on print/PDF
-  const logo = companyLogoHtml(company, { forPrint, maxHeight: 64 })
+  const logo = companyLogoHtml(company, { forPrint, maxHeight: 72 })
   const contactHtml = contactBlockHtml(company)
 
   return `
-    <header class="doc-letterhead" style="display:flex;align-items:flex-start;justify-content:space-between;padding-bottom:18px;border-bottom:3px solid #0ea5e9;margin-bottom:24px">
-      <div style="display:flex;align-items:center;gap:16px;">
-        <div style="flex-shrink:0">${logo}</div>
-        <div>
-          <h1 style="margin:0;font-size:24px;font-weight:900;color:#0f172a;letter-spacing:-0.02em;line-height:1.2;word-break:break-word">${esc(company.name)}</h1>
-          ${tagline ? `<p style="margin:4px 0 0;font-size:11pt;font-weight:500;color:#38bdf8">${esc(tagline)}</p>` : ''}
-        </div>
+    <header class="doc-letterhead" style="display:flex;align-items:center;justify-content:space-between;padding-bottom:18px;border-bottom:3px solid #0ea5e9;margin-bottom:24px">
+      <div style="flex-shrink:0;display:flex;align-items:center;">
+        ${logo}
       </div>
       <div style="text-align:right;flex-shrink:0;">
         ${contactHtml}

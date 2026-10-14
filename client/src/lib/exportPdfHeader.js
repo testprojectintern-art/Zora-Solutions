@@ -41,7 +41,7 @@ export async function drawQuotationStylePdfHeader(doc, company, options = {}) {
   const logoBase64 = logoUrl ? await loadImgBase64(logoUrl) : null
 
   if (logoBase64) {
-    doc.addImage(logoBase64, 'PNG', margin, y, 22, 22, '', 'FAST')
+    doc.addImage(logoBase64, 'PNG', margin, y, 42, 16, '', 'FAST')
   } else {
     doc.setFillColor(14, 165, 233)
     doc.roundedRect(margin, y, 18, 18, 2, 2, 'F')
@@ -49,19 +49,19 @@ export async function drawQuotationStylePdfHeader(doc, company, options = {}) {
     doc.setFontSize(12)
     doc.setFont('helvetica', 'bold')
     doc.text((company.name || 'C').charAt(0), margin + 9, y + 12, { align: 'center' })
-  }
 
-  const nameX = margin + (logoBase64 ? 26 : 22)
-  doc.setFontSize(16)
-  doc.setTextColor(15, 23, 42)
-  doc.setFont('helvetica', 'bold')
-  doc.text(company.name || 'Company', nameX, y + 8)
+    const nameX = margin + 22
+    doc.setFontSize(16)
+    doc.setTextColor(15, 23, 42)
+    doc.setFont('helvetica', 'bold')
+    doc.text(company.name || 'Company', nameX, y + 8)
 
-  if (company.tagline) {
-    doc.setFontSize(10)
-    doc.setTextColor(56, 189, 248) // sky-400 light blue
-    doc.setFont('helvetica', 'normal')
-    doc.text(company.tagline, nameX, y + 14)
+    if (company.tagline) {
+      doc.setFontSize(10)
+      doc.setTextColor(56, 189, 248) // sky-400 light blue
+      doc.setFont('helvetica', 'normal')
+      doc.text(company.tagline, nameX, y + 14)
+    }
   }
 
   // Contact details on the right — labels in light blue, values in dark

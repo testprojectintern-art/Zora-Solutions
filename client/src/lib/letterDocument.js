@@ -31,26 +31,15 @@ export function buildLetterheadHtml(company, { forPrint = true, siteSettings } =
   if (siteSettings && Object.keys(siteSettings).length) {
     return buildDocumentLetterheadHtml(siteSettings, {
       forPrint,
-      showTagline: company?.tagline || siteSettings.letterheadTagline || 'Next Level Tech',
     })
   }
-  const logoHtml = companyLogoHtml(company, { forPrint, maxHeight: LOGO_MAX_HEIGHT })
-
-  const tagline = company.tagline || 'Next Level Tech'
-  const taglineHtml = `<p style="margin:4px 0 0;font-size:11pt;font-weight:500;color:#0284c7;letter-spacing:0.01em;">${esc(tagline)}</p>`
-
+  const logoHtml = companyLogoHtml(company, { forPrint, maxHeight: 72 })
   const contactHtml = contactBlockHtml(company)
 
   return `
-    <header style="display:flex;align-items:center;justify-content:space-between;gap:24px;padding-bottom:24px;border-bottom:2px solid #e2e8f0;margin-bottom:32px;position:relative;">
+    <header style="display:flex;align-items:center;justify-content:space-between;gap:24px;padding-bottom:20px;border-bottom:2px solid #e2e8f0;margin-bottom:28px;position:relative;">
       <div style="position:absolute;bottom:-2px;left:0;width:100%;height:2px;background:linear-gradient(90deg, #0284c7, #38bdf8);"></div>
-      <div style="display:flex;align-items:center;gap:20px;min-width:0">
-        <div style="flex-shrink:0">${logoHtml}</div>
-        <div>
-          <h1 style="margin:0;font-size:26px;font-weight:800;color:#0f172a;letter-spacing:-0.03em">${esc(company.name || 'Company')}</h1>
-          ${taglineHtml}
-        </div>
-      </div>
+      <div style="flex-shrink:0">${logoHtml}</div>
       <div style="text-align:right;min-width:200px;flex:1;color:#475569;font-size:9.5pt;line-height:1.5;">${contactHtml}</div>
     </header>`
 }
