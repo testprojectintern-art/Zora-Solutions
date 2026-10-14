@@ -32,8 +32,8 @@ const PORT = process.env.PORT || 5000;
 connectDB();
 const server = http.createServer(app);
 initSocket(server);
-server.listen(PORT, () => {
-  console.log(`🚀 Zora Server running on http://localhost:${PORT}`);
+server.listen(PORT, '0.0.0.0', () => {
+  console.log(`🚀 Zora Server running on http://0.0.0.0:${PORT}`);
   console.log(`📊 Environment: ${process.env.NODE_ENV}`);
 });
 
