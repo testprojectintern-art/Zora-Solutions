@@ -12,23 +12,27 @@
   },
   "rewrites": [
     {
-      "source": "/api/(.*)",
+      "source": "/api/:path*",
       "destination": { "service": "server" }
     },
     {
-      "source": "/uploads/(.*)",
+      "source": "/uploads/:path*",
       "destination": { "service": "server" }
     },
     {
-      "source": "/assets/(.*)",
+      "source": "/assets/:path*",
       "destination": { "service": "client" }
     },
     {
-      "source": "/(.*\\..*)",
+      "source": "/:file.:ext",
       "destination": { "service": "client" }
     },
     {
-      "source": "/(.*)",
+      "source": "/",
+      "destination": { "service": "client", "path": "/index.html" }
+    },
+    {
+      "source": "/:path*",
       "destination": { "service": "client", "path": "/index.html" }
     }
   ]
