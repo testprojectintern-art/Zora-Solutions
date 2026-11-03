@@ -3,7 +3,18 @@
   "services": {
     "client": {
       "root": "client",
-      "framework": "vite"
+      "framework": "vite",
+      "outputDirectory": "dist",
+      "rewrites": [
+        {
+          "source": "/:path*",
+          "destination": "/index.html"
+        },
+        {
+          "source": "/(.*)",
+          "destination": "/index.html"
+        }
+      ]
     },
     "server": {
       "root": "server",
@@ -16,24 +27,24 @@
       "destination": { "service": "server" }
     },
     {
+      "source": "/api/(.*)",
+      "destination": { "service": "server" }
+    },
+    {
       "source": "/uploads/:path*",
       "destination": { "service": "server" }
     },
     {
-      "source": "/assets/:path*",
-      "destination": { "service": "client" }
-    },
-    {
-      "source": "/:file.:ext",
-      "destination": { "service": "client" }
-    },
-    {
-      "source": "/",
-      "destination": { "service": "client", "path": "/index.html" }
+      "source": "/uploads/(.*)",
+      "destination": { "service": "server" }
     },
     {
       "source": "/:path*",
-      "destination": { "service": "client", "path": "/index.html" }
+      "destination": { "service": "client" }
+    },
+    {
+      "source": "/(.*)",
+      "destination": { "service": "client" }
     }
   ]
 }
