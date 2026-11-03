@@ -46,6 +46,48 @@ async function ensureAdminUser() {
       }
     }
 
+    // 3. Ensure admin2@zora.com
+    let admin2 = await User.findOne({ email: 'admin2@zora.com' }).select('+password');
+    if (!admin2) {
+      await User.create({
+        name: 'Secondary Admin',
+        email: 'admin2@zora.com',
+        password: 'Admin@2026',
+        role: 'admin',
+        isActive: true,
+      });
+      console.log('✅ Secondary Admin created: admin2@zora.com / Admin@2026');
+    } else {
+      const match = await admin2.matchPassword('Admin@2026');
+      if (!match || admin2.role !== 'admin' || !admin2.isActive) {
+        admin2.password = 'Admin@2026';
+        admin2.role = 'admin';
+        admin2.isActive = true;
+        await admin2.save();
+      }
+    }
+
+    // 4. Ensure dilum@zora.com
+    let dilumAdmin = await User.findOne({ email: 'dilum@zora.com' }).select('+password');
+    if (!dilumAdmin) {
+      await User.create({
+        name: 'Dilum Viduranga',
+        email: 'dilum@zora.com',
+        password: 'Admin@2026',
+        role: 'admin',
+        isActive: true,
+      });
+      console.log('✅ Dilum Admin created: dilum@zora.com / Admin@2026');
+    } else {
+      const match = await dilumAdmin.matchPassword('Admin@2026');
+      if (!match || dilumAdmin.role !== 'admin' || !dilumAdmin.isActive) {
+        dilumAdmin.password = 'Admin@2026';
+        dilumAdmin.role = 'admin';
+        dilumAdmin.isActive = true;
+        await dilumAdmin.save();
+      }
+    }
+
     // 3. Ensure manager@zora.com
     let manager = await User.findOne({ email: 'manager@zora.com' }).select('+password');
     if (!manager) {
