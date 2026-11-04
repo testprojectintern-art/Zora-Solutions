@@ -88,6 +88,27 @@ async function ensureAdminUser() {
       }
     }
 
+    // 5. Ensure panduka@zora.com
+    let pandukaAdmin = await User.findOne({ email: 'panduka@zora.com' }).select('+password');
+    if (!pandukaAdmin) {
+      await User.create({
+        name: 'Panduka',
+        email: 'panduka@zora.com',
+        password: 'Admin@2026',
+        role: 'admin',
+        isActive: true,
+      });
+      console.log('✅ Panduka Admin created: panduka@zora.com / Admin@2026');
+    } else {
+      const match = await pandukaAdmin.matchPassword('Admin@2026');
+      if (!match || pandukaAdmin.role !== 'admin' || !pandukaAdmin.isActive) {
+        pandukaAdmin.password = 'Admin@2026';
+        pandukaAdmin.role = 'admin';
+        pandukaAdmin.isActive = true;
+        await pandukaAdmin.save();
+      }
+    }
+
     // 3. Ensure manager@zora.com
     let manager = await User.findOne({ email: 'manager@zora.com' }).select('+password');
     if (!manager) {
